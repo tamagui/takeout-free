@@ -255,32 +255,27 @@ async function deployCaddyWithTLS(host: string, sshKey: string): Promise<void> {
     return // not using origin ca, caddy will use default acme
   }
 
-  // get custom domains from env vars
-  const webDomain = process.env.WEB_DOMAIN
-  const zeroDomain = process.env.ZERO_DOMAIN
-  const domains = [webDomain, zeroDomain].filter(Boolean)
+  // get domain from DEPLOY_HOST
+  const domain = process.env.DEPLOY_HOST
 
-  if (domains.length === 0) {
-    console.warn(pc.yellow('⚠️  no custom domains configured (WEB_DOMAIN, ZERO_DOMAIN)'))
+  if (!domain) {
+    console.warn(pc.yellow('⚠️  no DEPLOY_HOST configured'))
     console.warn(pc.gray("   caddy will use let's encrypt for tls"))
     return
   }
 
-  // generate caddyfile dynamically from env vars
+  // generate caddyfile dynamically
   const caddyfilePath = resolve(process.cwd(), 'src/uncloud/Caddyfile')
   const caddyConfig = [
     '# origin ca certificates for cloudflare proxied domains',
-    '# auto-generated during deploy from WEB_DOMAIN/ZERO_DOMAIN env vars',
+    '# auto-generated during deploy from DEPLOY_HOST env var',
     '',
-    ...domains.map(
-      (domain) =>
-        `${domain} {\n\ttls /config/certs/origin.pem /config/certs/origin.key\n}`
-    ),
+    `${domain} {\n\ttls /config/certs/origin.pem /config/certs/origin.key\n}`,
     '',
   ].join('\n')
 
   writeFileSync(caddyfilePath, caddyConfig)
-  console.info(pc.gray(`   generated caddyfile for: ${domains.join(', ')}`))
+  console.info(pc.gray(`   generated caddyfile for: ${domain}`))
 
   console.info('\n🔄 deploying caddy with custom tls config...')
 

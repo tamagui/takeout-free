@@ -42,8 +42,7 @@
     "zero:generate": "over-zero generate --after 'bun lint:fix'"
   },
   "overrides": {
-    "@expo/fingerprint": "0.15.3",
-    "tamagui": "^2.0.0-1768859816578"
+    "@expo/fingerprint": "0.15.3"
   },
   "dependencies": {
     "@better-auth/expo": "^1.3.32",
@@ -122,32 +121,14 @@
     "vite": "^7.1.12",
     "vitest": "^4.0.3"
   },
-  "reanimated": {
-    "staticFeatureFlags": {
-      "ENABLE_SHARED_ELEMENT_TRANSITIONS": true,
-      "ANDROID_SYNCHRONOUSLY_UPDATE_UI_PROPS": true,
-      "IOS_SYNCHRONOUSLY_UPDATE_UI_PROPS": true,
-      "USE_COMMIT_HOOK_ONLY_FOR_REACT_COMMITS": true,
-      "DISABLE_COMMIT_PAUSING_MECHANISM": true,
-      "FORCE_REACT_RENDER_FOR_SETTLED_ANIMATIONS": true
-    }
-  },
   "trustedDependencies": [
     "@rocicorp/zero-sqlite3"
   ],
   "env": {
     "BETTER_AUTH_SECRET": true,
     "BETTER_AUTH_URL": true,
-    "DEPLOYMENT_PLATFORM": "uncloud",
-    "DEPLOYMENT_ARCH": "linux/amd64",
-    "DEPLOY_HOST": "",
-    "DEPLOY_USER": "root",
-    "DEPLOY_SSH_KEY": "",
-    "DEPLOY_DB": "",
     "ONE_SERVER_URL": true,
     "VITE_PUBLIC_ZERO_SERVER": "",
-    "WEB_DOMAIN": "",
-    "ZERO_DOMAIN": "",
     "ZERO_VERSION": ""
   },
   "publishConfig": {

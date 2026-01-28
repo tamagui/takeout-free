@@ -427,13 +427,8 @@ async function monitor() {
         console.info(`🎉 deployment successful!`)
 
         // Show access info
-        const webDomain = process.env.WEB_DOMAIN || deployHost
-        const zeroDomain = process.env.ZERO_DOMAIN
         console.info()
-        console.info(`  web:  https://${webDomain}`)
-        if (zeroDomain) {
-          console.info(`  zero: https://${zeroDomain}`)
-        }
+        console.info(`  web: https://${deployHost}`)
 
         process.exit(0)
       }
