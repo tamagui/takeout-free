@@ -1,0 +1,76 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "tamagui",
+            "importNames": [
+              "Button",
+              "Tooltip",
+              "Popover",
+              "Select",
+              "Input",
+              "Switch",
+              "TextArea",
+              "Image"
+            ],
+            "message": "Use custom component from ~/interface instead"
+          },
+          {
+            "name": "@tamagui/image-next",
+            "message": "Use Image from ~/interface/image/Image instead"
+          },
+          {
+            "name": "~/interface/text/Body",
+            "message": "Use Text from ~/interface/text/Text instead"
+          }
+        ]
+      }
+    ],
+    "no-unused-vars": "off",
+    "no-empty-file": "off",
+    "no-console": "off",
+    "no-async-promise-executor": "off",
+    "no-unused-expressions": "off",
+    "no-invalid-fetch-options": "off",
+    "triple-slash-reference": "off",
+    "no-constant-binary-expression": "off",
+    "unicorn/no-single-promise-in-promise-methods": "off",
+    "unicorn/no-thenable": "off",
+    "oxc/const-comparisons": "off",
+    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/rules-of-hooks": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/interface/**/*.tsx",
+        "src/interface/**/*.ts",
+        "src/features/auth/ui/OtpInput.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "**/.tamagui/**",
+    "**/tmp-data/**",
+    "**/.build/**",
+    "storage/**",
+    "**/.sst/**",
+    "**/.output/**",
+    "**/migrations/meta/**",
+    "**/migrate-dist.js",
+    "**/themes-out.ts",
+    "**/*.d.ts",
+    "**/ios/**",
+    "**/android/**",
+    "**/dist/**",
+    "**/.docker/**",
+    "**/.dist/**"
+  ]
+}

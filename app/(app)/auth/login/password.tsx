@@ -1,0 +1,78 @@
+import { router, useParams } from 'one'
+import { useState } from 'react'
+import { Keyboard } from 'react-native'
+import { YStack } from 'tamagui'
+
+import { passwordLogin } from '~/features/auth/client/passwordLogin'
+import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { showError } from '~/interface/dialogs/actions'
+import { Input } from '~/interface/forms/Input'
+import { PasswordIcon } from '~/interface/icons/phosphor/PasswordIcon'
+import { KeyboardStickyFooter } from '~/interface/keyboard/KeyboardStickyFooter'
+import { StepPageLayout } from '~/interface/pages/StepPageLayout'
+
+export const PasswordPage = () => {
+  const params = useParams<{ value?: string }>()
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const displayValue = params.value || 'example@gmail.com'
+
+  const [password, setPassword] = useState('')
+
+  const handleContinue = async () => {
+    if (!params.value) {
+      showError('Email is not specified.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const { error } = await passwordLogin(params.value, password)
+
+      if (error) {
+        Keyboard.dismiss()
+        showError(error)
+        return
+      }
+      router.replace('/home')
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <StepPageLayout
+      title="Enter Password"
+      Icon={PasswordIcon}
+      description="Please enter the password for"
+      descriptionSecondLine={displayValue}
+      bottom={
+        <KeyboardStickyFooter openedOffset={-10}>
+          <ButtonSimple
+            data-testid="submit-password-button"
+            size="large"
+            onPress={handleContinue}
+            disabled={!password || loading}
+            variant="default"
+          >
+            <ButtonSimple.Text>{loading ? 'Verifying...' : 'Next'}</ButtonSimple.Text>
+          </ButtonSimple>
+        </KeyboardStickyFooter>
+      }
+    >
+      <YStack>
+        <Input
+          data-testid="password-input"
+          type="password"
+          autoFocus
+          value={password}
+          onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
+          onSubmitEditing={handleContinue}
+        />
+      </YStack>
+    </StepPageLayout>
+  )
+}

@@ -1,0 +1,84 @@
+import { expo } from '@better-auth/expo'
+import { time } from '@take-out/helpers'
+import { betterAuth } from 'better-auth'
+import { admin, bearer, jwt, magicLink } from 'better-auth/plugins'
+
+import { DOMAIN } from '~/constants/app'
+import { database } from '~/database/database'
+import { BETTER_AUTH_SECRET, BETTER_AUTH_URL } from '~/server/env-server'
+
+import { APP_SCHEME } from '../constants'
+import { afterCreateUser } from './afterCreateUser'
+
+console.info(`[better-auth] server`, BETTER_AUTH_SECRET.slice(0, 3), BETTER_AUTH_URL)
+
+export const authServer = betterAuth({
+  // using BETTER_AUTH_URL instead of baseUrl
+
+  database,
+
+  session: {
+    freshAge: time.minute.days(2),
+    storeSessionInDatabase: true,
+  },
+
+  emailAndPassword: {
+    enabled: true,
+  },
+
+  trustedOrigins: [
+    // match dev, prod, tauri
+    `https://${DOMAIN}`,
+    'http://localhost:8081',
+    `${APP_SCHEME}://`,
+  ],
+
+  databaseHooks: {
+    user: {
+      create: {
+        async after(user) {
+          await afterCreateUser(user)
+        },
+      },
+    },
+  },
+
+  plugins: [
+    jwt({
+      jwt: {
+        expirationTime: '3y',
+      },
+
+      jwks: {
+        // compat with zero
+        keyPairConfig: { alg: 'EdDSA', crv: 'Ed25519' },
+      },
+    }),
+
+    bearer(),
+
+    // To support better-auth/client in React Native
+    expo(),
+
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        console.info('Magic link email would be sent to:', email, 'with URL:', url)
+      },
+    }),
+
+    admin(),
+  ],
+
+  logger: {
+    level: 'debug',
+    log(level, message, ...args) {
+      console.info(level, message, ...args)
+    },
+  },
+
+  account: {
+    accountLinking: {
+      allowDifferentEmails: true,
+    },
+  },
+})

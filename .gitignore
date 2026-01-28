@@ -1,0 +1,66 @@
+node_modules
+test-results
+
+ios/**
+android/**
+
+packages/*/types
+
+tmp-data
+
+# keep types in repo to track them
+# **/types/**/*.d.ts
+# but map can be ignored and just published on npm
+**/types/**/*.d.ts.map
+
+tmp
+dist
+.DS_Store
+.ultra.cache.json
+*.tsbuildinfo
+
+.build
+.tamagui
+
+.sst
+
+# generated claude code skills (run `bun tko docs skills` to regenerate)
+.claude/skills/takeout-*
+
+.env
+.env.production
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.backup
+.env.ios
+
+.expo
+
+# test output
+.output
+
+# Logs
+.logs/
+
+.watchman*
+
+# Docker volume data
+.docker
+
+# uncloud
+.cloud-init.yml
+# cluster config (encrypted, optionally commit for team)
+# .uncloud-cluster.enc
+src/uncloud/docker-compose.processed.yml
+report.xml
+certs/
+
+# Origin CA certs (keep .gitkeep)
+src/uncloud/certs/origin.*
+
+# Custom Caddyfile (generated during onboard if custom domains configured)
+src/uncloud/Caddyfile
