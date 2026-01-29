@@ -4,14 +4,23 @@
  * @description npm postinstall tasks
  */
 
-import { writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { $ } from 'bun'
 
-// "tko" wont work until this runs so referencing it directly:
-const buildInitialLocation = require.resolve('@take-out/scripts/build-initial')
-await $`bun run ${buildInitialLocation}`
+// patch @take-out/scripts package.json to add missing "." export (vite 7 strict exports)
+try {
+  const scriptsPackagePath = require.resolve('@take-out/scripts/package.json')
+  const pkg = JSON.parse(readFileSync(scriptsPackagePath, 'utf-8'))
+  if (!pkg.exports['.']) {
+    pkg.exports['.'] = { types: './src/run.ts', default: './src/run.ts' }
+    writeFileSync(scriptsPackagePath, JSON.stringify(pkg, null, 2))
+    console.info('✅ Patched @take-out/scripts package.json exports')
+  }
+} catch {
+  // ignore if package not found
+}
 
 await $`bun tko run update-local-env`
 await $`bun run one patch`
