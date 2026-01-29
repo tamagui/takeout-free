@@ -1,21 +1,13 @@
 import { Link, type Href } from 'one'
-import { Linking } from 'react-native'
-import { isWeb, ScrollView, SizableText, View, XStack, YStack } from 'tamagui'
+import { ScrollView, SizableText, View, XStack, YStack } from 'tamagui'
 
-import { APP_NAME_LOWERCASE, DOMAIN } from '~/constants/app'
+import { APP_NAME_LOWERCASE } from '~/constants/app'
 import { useLogout } from '~/features/auth/useLogout'
-import { dialogConfirm } from '~/interface/dialogs/actions'
-import { BookmarkIcon } from '~/interface/icons/phosphor/BookmarkIcon'
 import { CaretRightIcon } from '~/interface/icons/phosphor/CaretRightIcon'
-import { ChatCircleIcon } from '~/interface/icons/phosphor/ChatCircleIcon'
 import { DoorIcon } from '~/interface/icons/phosphor/DoorIcon'
-import { FileIcon } from '~/interface/icons/phosphor/FileIcon'
-import { InfoIcon } from '~/interface/icons/phosphor/InfoIcon'
-import { LockIcon } from '~/interface/icons/phosphor/LockIcon'
 import { UserIcon } from '~/interface/icons/phosphor/UserIcon'
 import { PageLayout } from '~/interface/pages/PageLayout'
 import { SepHeading } from '~/interface/text/Headings'
-import { useToggleTheme } from '~/interface/theme/ThemeSwitch'
 
 import type { IconComponent } from '~/interface/icons/types'
 
@@ -99,80 +91,16 @@ function SettingRow({ item }: { item: SettingItem }) {
 
 export function ProfileSettingsPage() {
   const { logout } = useLogout()
-  const {
-    onPress: toggleTheme,
-    Icon: ThemeIcon,
-    setting: themeSetting,
-  } = useToggleTheme()
-  const themeLabel = themeSetting[0]?.toUpperCase() + themeSetting.slice(1)
-
-  const handleDeleteAccount = async () => {
-    await dialogConfirm({
-      title: 'Delete Account',
-      description: 'Account deletion is not currently available.',
-    })
-  }
 
   const sections: SettingSection[] = [
     {
       title: 'Account',
       items: [
         {
-          id: 'theme',
-          title: `Theme: ${themeLabel}`,
-          icon: ThemeIcon,
-          onPress: toggleTheme,
-        },
-        {
           id: 'profile',
           title: 'Edit Profile',
           icon: UserIcon,
           href: '/home/settings/edit-profile',
-        },
-        {
-          id: 'blocked-users',
-          title: 'Blocked Users',
-          icon: LockIcon,
-          href: '/home/settings/blocked-users',
-        },
-      ],
-    },
-    {
-      title: 'Support and more',
-      items: [
-        {
-          id: 'help',
-          title: 'Help & Support',
-          icon: ChatCircleIcon,
-          href: '/help',
-          external: true,
-        },
-        {
-          id: 'documentation',
-          title: 'Documentation',
-          icon: BookmarkIcon,
-          href: '/docs/introduction',
-          external: true,
-        },
-        {
-          id: 'terms',
-          title: 'Terms of Service',
-          icon: FileIcon,
-          href: '/terms-of-service',
-          external: true,
-        },
-        {
-          id: 'privacy',
-          title: 'Privacy Policy',
-          icon: LockIcon,
-          href: '/privacy-policy',
-          external: true,
-        },
-        {
-          id: 'delete',
-          title: 'Delete Account',
-          icon: InfoIcon,
-          onPress: handleDeleteAccount,
         },
       ],
     },

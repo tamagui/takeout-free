@@ -1,10 +1,11 @@
 import { memo, useState } from 'react'
-import { SizableText, Spinner, XStack, YStack } from 'tamagui'
+import { SizableText, Spinner, Theme, XStack, YStack } from 'tamagui'
 
 import { useTodos } from '~/features/todo/useTodos'
 import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
 import { Input } from '~/interface/forms/Input'
-import { H3, H5 } from '~/interface/text/Headings'
+import { PageContainer } from '~/interface/layout/PageContainer'
+import { H1, H3 } from '~/interface/text/Headings'
 
 export const HomePage = memo(() => {
   const { todos, isLoading, addTodo, toggleTodo, deleteTodo } = useTodos()
@@ -24,84 +25,144 @@ export const HomePage = memo(() => {
       width="100vw"
       ml="50%"
       transform="translateX(-50%)"
+      minHeight="100vh"
     >
-      <YStack pb="$10" gap="$4" mx="auto" px="$4" width="100%" $xl={{ maxW: 560 }}>
-        <H3 mt="$4">Todo Demo</H3>
-
-        <XStack gap="$2" width="100%">
-          <Input
-            flex={1}
-            placeholder="What needs to be done?"
-            value={newTodoText}
-            onChangeText={setNewTodoText}
-            onSubmitEditing={handleAddTodo}
-          />
-          <ButtonSimple onPress={handleAddTodo} theme="blue">
-            Add
-          </ButtonSimple>
+      {/* notice banner */}
+      <Theme name="yellow">
+        <XStack bg="$color3" py="$3" width="100%">
+          <PageContainer>
+            <SizableText size="$4">
+              This free stack was just extracted and needs syncing with the latest. We'll
+              be back soon!
+            </SizableText>
+          </PageContainer>
         </XStack>
+      </Theme>
 
-        {isLoading ? (
-          <YStack p="$4" items="center" justify="center">
-            <Spinner size="small" />
-          </YStack>
-        ) : todos.length === 0 ? (
-          <YStack p="$4" items="center" justify="center" mt="$4">
-            <H5>No todos yet - add one above!</H5>
-          </YStack>
-        ) : (
-          <YStack gap="$2">
-            {todos.map((todo) => (
-              <XStack
-                key={todo.id}
-                p="$3"
-                bg="$color2"
-                rounded="$4"
-                items="center"
-                gap="$3"
-                pressStyle={{ opacity: 0.8 }}
-              >
-                <ButtonSimple
-                  size="small"
-                  circular
-                  theme={todo.completed ? 'green' : 'gray'}
-                  onPress={() => toggleTodo(todo.id, !todo.completed)}
+      <XStack
+        pb="$10"
+        gap="$6"
+        px="$4"
+        width="100%"
+        maxWidth={1200}
+        mx="auto"
+        flexDirection="column"
+        $lg={{ flexDirection: 'row' }}
+      >
+        {/* todo list */}
+        <YStack flex={1} gap="$4" pt="$4">
+          <H1 py="$2" size="$6">
+            Todo Demo
+          </H1>
+
+          <XStack gap="$2" width="100%">
+            <Input
+              flex={1}
+              placeholder="What needs to be done?"
+              value={newTodoText}
+              onChangeText={setNewTodoText}
+              onSubmitEditing={handleAddTodo}
+              size="$6"
+              height={56}
+            />
+            <ButtonSimple onPress={handleAddTodo} theme="blue" px="$5">
+              Add
+            </ButtonSimple>
+          </XStack>
+
+          {isLoading ? (
+            <YStack p="$4" items="center" justify="center">
+              <Spinner size="small" />
+            </YStack>
+          ) : todos.length === 0 ? (
+            <YStack p="$4" items="center" justify="center" mt="$4">
+              <H3>No todos yet - add one above!</H3>
+            </YStack>
+          ) : (
+            <YStack gap="$2">
+              {todos.map((todo) => (
+                <XStack
+                  key={todo.id}
+                  p="$3"
+                  bg="$color2"
+                  rounded="$4"
+                  items="center"
+                  gap="$3"
+                  pressStyle={{ opacity: 0.8 }}
                 >
-                  {todo.completed ? '✓' : ' '}
-                </ButtonSimple>
-                <YStack flex={1}>
                   <XStack
-                    style={{
-                      textDecoration: todo.completed ? 'line-through' : 'none',
-                      opacity: todo.completed ? 0.6 : 1,
-                    }}
+                    width={20}
+                    height={20}
+                    rounded="$2"
+                    borderWidth={2}
+                    borderColor={todo.completed ? '$green9' : '$color8'}
+                    bg={todo.completed ? '$green9' : 'transparent'}
+                    items="center"
+                    justify="center"
+                    cursor="pointer"
+                    onPress={() => toggleTodo(todo.id, !todo.completed)}
+                  >
+                    {todo.completed && (
+                      <SizableText size="$1" color="white" fontWeight="bold">
+                        ✓
+                      </SizableText>
+                    )}
+                  </XStack>
+                  <SizableText
+                    flex={1}
+                    textDecorationLine={todo.completed ? 'line-through' : 'none'}
+                    opacity={todo.completed ? 0.6 : 1}
                   >
                     {todo.text}
-                  </XStack>
-                </YStack>
-                <ButtonSimple
-                  size="small"
-                  theme="red"
-                  onPress={() => deleteTodo(todo.id)}
-                >
-                  ✕
-                </ButtonSimple>
-              </XStack>
-            ))}
-          </YStack>
-        )}
-
-        <YStack mt="$4" p="$3" bg="$color2" rounded="$4">
-          <H5 mb="$2">About this demo</H5>
-          <YStack gap="$1" opacity={0.7}>
-            <SizableText>This is a simple todo list demonstrating:</SizableText>
-            <SizableText>• Zero real-time sync (changes sync across devices)</SizableText>
-            <SizableText>• Better Auth authentication</SizableText>
-            <SizableText>• Tamagui UI components</SizableText>
-            <SizableText>• One.js universal routing</SizableText>
-          </YStack>
+                  </SizableText>
+                  <ButtonSimple theme="red" px="$3" onPress={() => deleteTodo(todo.id)}>
+                    ✕
+                  </ButtonSimple>
+                </XStack>
+              ))}
+            </YStack>
+          )}
         </YStack>
-      </YStack>
+
+        {/* about section */}
+        <YStack
+          display="none"
+          pt="$4"
+          gap="$4"
+          $lg={{ display: 'flex', width: 340, pt: '$12' }}
+        >
+          <Theme name="blue">
+            <YStack
+              p="$4"
+              bg="$color3"
+              rounded="$4"
+              borderColor="$color6"
+              borderWidth={1}
+            >
+              <H3 mb="$2" color="$color11">
+                Takeout Free
+              </H3>
+              <YStack gap="$2" opacity={0.8}>
+                <SizableText size="$6">
+                  A minimal but complete stack for native and web apps.
+                </SizableText>
+                <YStack gap="$1" mt="$1">
+                  <SizableText size="$4" color="$color11">
+                    One • Tamagui • Zero • Better Auth
+                  </SizableText>
+                  <SizableText size="$4" color="$color11">
+                    Uncloud • Bun • TypeScript
+                  </SizableText>
+                </YStack>
+                <SizableText size="$4" mt="$2" opacity={0.7}>
+                  Includes scripts for dev, build, deploy, and a clean package structure
+                  ready for production.
+                </SizableText>
+              </YStack>
+            </YStack>
+          </Theme>
+        </YStack>
+      </XStack>
     </YStack>
   )
 })

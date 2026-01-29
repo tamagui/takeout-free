@@ -156,7 +156,7 @@ const ButtonFrame = styled(XStack, {
         minW: buttonWidths.large,
         rounded: buttonBorderRadius.large,
         gap: '$3',
-        px: '$4',
+        px: '$6',
       },
       medium: {
         minW: buttonWidths.medium,
@@ -222,7 +222,7 @@ const ButtonText = styled(Text, {
   color: '$color',
   cursor: 'default',
   fontFamily: '$mono',
-  fontWeight: '500',
+  fontWeight: '600',
   select: 'none',
   y: IS_SAFARI ? 1 : 0,
 
