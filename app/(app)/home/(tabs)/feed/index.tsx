@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { Spinner, XStack, YStack } from 'tamagui'
+import { SizableText, Spinner, XStack, YStack } from 'tamagui'
 
 import { useTodos } from '~/features/todo/useTodos'
 import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
@@ -94,11 +94,11 @@ export const HomePage = memo(() => {
         <YStack mt="$4" p="$3" bg="$color2" rounded="$4">
           <H5 mb="$2">About this demo</H5>
           <YStack gap="$1" opacity={0.7}>
-            <XStack>This is a simple todo list demonstrating:</XStack>
-            <XStack>• Zero real-time sync (changes sync across devices)</XStack>
-            <XStack>• Better Auth authentication</XStack>
-            <XStack>• Tamagui UI components</XStack>
-            <XStack>• One.js universal routing</XStack>
+            <SizableText>This is a simple todo list demonstrating:</SizableText>
+            <SizableText>• Zero real-time sync (changes sync across devices)</SizableText>
+            <SizableText>• Better Auth authentication</SizableText>
+            <SizableText>• Tamagui UI components</SizableText>
+            <SizableText>• One.js universal routing</SizableText>
           </YStack>
         </YStack>
       </YStack>
