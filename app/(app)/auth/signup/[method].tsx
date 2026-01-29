@@ -43,7 +43,9 @@ export const SignupPage = memo(() => {
     setLoading(true)
 
     try {
-      router.push(`/auth/login/password?method=${method}&value=${encodeURIComponent(inputValue)}`)
+      router.push(
+        `/auth/login/password?method=${method}&value=${encodeURIComponent(inputValue)}`
+      )
     } finally {
       setLoading(false)
     }
