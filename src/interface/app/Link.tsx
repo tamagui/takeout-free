@@ -9,8 +9,6 @@ import { isWeb, SizableText, useDebounce, View, type SizableTextProps } from 'ta
 
 import { ArrowUpRightIcon } from '~/interface/icons/phosphor/ArrowUpRightIcon'
 
-import { wrapWithTooltip, type TooltipWrapperProps } from '../tooltip/TooltipSimple'
-
 type ResetStackConfig = {
   index?: number
   routes: Array<{ key: string; name: string; params?: any }>
@@ -19,12 +17,10 @@ type ResetStackConfig = {
 export type LinkProps = OneLinkProps<Href> &
   SizableTextProps & {
     delayNavigation?: number | boolean
-    resetStack?: boolean | ResetStackConfig // reset navigation stack with custom routes (native only)
-    hideExternalIcon?: boolean // hide the external link icon for target="_blank" links
-
-    // allows us to attach data to the last navigated link
+    resetStack?: boolean | ResetStackConfig
+    hideExternalIcon?: boolean
     linkMeta?: LinkMeta
-  } & Omit<TooltipWrapperProps, 'popover'>
+  }
 
 export type LinkMeta =
   | { type: 'none' }
@@ -56,9 +52,6 @@ export const Link = ({
   resetStack,
   hideExternalIcon,
   linkMeta,
-  tooltip,
-  tooltipDelayed,
-  tooltipPlacement,
   target,
   children,
   ...props
@@ -66,7 +59,6 @@ export const Link = ({
   const linkProps = useLinkTo({ href: href as string, replace })
   const navigation = useNavigation()
 
-  // use debounce to avoid multiple presses on accident that can cause navigation issues
   const handlePress = useDebounce(
     (e) => {
       props.onPress?.(e)
@@ -75,18 +67,15 @@ export const Link = ({
         return
       }
 
-      // case 1: reset stack for native (most specific navigation behavior)
       if (resetStack && !isWeb) {
         e.preventDefault()
 
         if (typeof resetStack === 'object') {
-          // use custom reset configuration
           navigation.reset({
             index: resetStack.index ?? 0,
             routes: resetStack.routes as any,
           })
         } else {
-          // default behavior: reset to the href route
           const routeName = href.toString().replace(/^\//, '')
           navigation.reset({
             index: 0,
@@ -96,7 +85,6 @@ export const Link = ({
         return
       }
 
-      // case 2: delayed navigation (with replace support)
       if (delayNavigation) {
         e.preventDefault()
         setTimeout(
@@ -112,14 +100,12 @@ export const Link = ({
         return
       }
 
-      // case 3: replace navigation
       if (replace) {
         e.preventDefault()
         router.replace(href)
         return
       }
 
-      // case 4: default behavior using linkProps
       linkProps.onPress(e)
     },
     1000,
@@ -150,12 +136,11 @@ export const Link = ({
       children
     )
 
-  const linkElement = (
+  return (
     <SizableText
       render="a"
       target={target}
       disabled={!!disabled}
-      // always except-style
       asChild={asChild ? 'except-style' : false}
       className="t_Link"
       cursor="pointer"
@@ -183,10 +168,4 @@ export const Link = ({
       {childrenElements}
     </SizableText>
   )
-
-  return wrapWithTooltip(linkElement, {
-    tooltip,
-    tooltipDelayed,
-    tooltipPlacement,
-  })
 }

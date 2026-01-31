@@ -1,13 +1,11 @@
 import { Link, usePathname } from 'one'
-import { useMedia, View } from 'tamagui'
+import { useMedia, XStack, View } from 'tamagui'
 
 import { Pressable } from '~/interface/buttons/Pressable'
 import { HouseIcon } from '~/interface/icons/phosphor/HouseIcon'
 import { UserCircleIcon } from '~/interface/icons/phosphor/UserCircleIcon'
-import { RovingTabs } from '~/interface/tabs/RovingTabs'
 
 import type { Href } from 'one'
-import type { TabsTabProps } from 'tamagui'
 
 type TabRoute = {
   name: string
@@ -29,33 +27,24 @@ export function NavigationTabs() {
     routes.find((r) => pathname.startsWith(r.href as string))?.name ?? 'home'
 
   return (
-    <RovingTabs value={currentTab} indicatorStyle="underline">
-      {({
-        handleOnInteraction,
-      }: {
-        handleOnInteraction: TabsTabProps['onInteraction']
-      }) =>
-        routes.map((route) => {
-          const Icon = route.icon
-          return (
-            <RovingTabs.Tab
-              key={route.name}
-              value={route.name}
-              onInteraction={handleOnInteraction}
+    <XStack gap="$2">
+      {routes.map((route) => {
+        const Icon = route.icon
+        const isActive = currentTab === route.name
+        return (
+          <Link key={route.name} href={route.href}>
+            <Pressable
               px="$4"
               py="$2"
+              rounded="$4"
+              bg={isActive ? '$color3' : 'transparent'}
+              hoverStyle={{ bg: '$color2' }}
             >
-              <Link href={route.href}>
-                <View items="center" cursor="pointer">
-                  <Pressable items="center">
-                    <Icon size={iconSize} color="$color" />
-                  </Pressable>
-                </View>
-              </Link>
-            </RovingTabs.Tab>
-          )
-        })
-      }
-    </RovingTabs>
+              <Icon size={iconSize} color={isActive ? '$color12' : '$color10'} />
+            </Pressable>
+          </Link>
+        )
+      })}
+    </XStack>
   )
 }

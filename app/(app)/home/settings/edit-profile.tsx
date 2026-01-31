@@ -1,7 +1,7 @@
 import { useRouter } from 'one'
 import { H1, SizableText, YStack } from 'tamagui'
 
-import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { Button } from '~/interface/buttons/Button'
 import { PageLayout } from '~/interface/pages/PageLayout'
 
 export default function EditProfilePage() {
@@ -14,9 +14,9 @@ export default function EditProfilePage() {
         <SizableText color="$color10" text="center">
           Profile editing coming soon.
         </SizableText>
-        <ButtonSimple size="large" onPress={() => router.back()}>
+        <Button size="$5" onPress={() => router.back()}>
           Go Back
-        </ButtonSimple>
+        </Button>
       </YStack>
     </PageLayout>
   )

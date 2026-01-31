@@ -1,12 +1,10 @@
 import { useUserScheme } from '@vxrn/color-scheme'
 import { styled, View } from 'tamagui'
 
-import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { Button } from '~/interface/buttons/Button'
 import { CircleHalfIcon } from '~/interface/icons/phosphor/CircleHalfIcon'
 import { MoonStarsIcon } from '~/interface/icons/phosphor/MoonStarsIcon'
 import { SunIcon } from '~/interface/icons/phosphor/SunIcon'
-
-import { TooltipSimple } from '../tooltip/TooltipSimple'
 
 import type { SizeTokens } from 'tamagui'
 
@@ -34,28 +32,24 @@ export function ThemeSwitch({ size = '$2' }: { size?: SizeTokens }) {
 
   return (
     <View items="center" gap="$1">
-      <TooltipSimple label={setting[0]?.toUpperCase() + setting.slice(1)}>
-        <ButtonSimple
-          onPress={onPress}
-          transition="medium"
-          size="medium"
-          circular
-          keepTooltipOpen
-          pressStyle={{ scale: 0.9, opacity: 0.8 }}
-          hoverStyle={{ scale: 1.05 }}
-          aria-label="Toggle theme"
-        >
-          <IconContainer active={setting === 'light'}>
-            <SunIcon size={iconSize} />
-          </IconContainer>
-          <IconContainer active={setting === 'dark'}>
-            <MoonStarsIcon size={iconSize} />
-          </IconContainer>
-          <IconContainer active={setting === 'system'}>
-            <CircleHalfIcon size={iconSize} />
-          </IconContainer>
-        </ButtonSimple>
-      </TooltipSimple>
+      <Button
+        onPress={onPress}
+        transition="medium"
+        circular
+        pressStyle={{ scale: 0.9, opacity: 0.8 }}
+        hoverStyle={{ scale: 1.05 }}
+        aria-label="Toggle theme"
+      >
+        <IconContainer active={setting === 'light'}>
+          <SunIcon size={iconSize} />
+        </IconContainer>
+        <IconContainer active={setting === 'dark'}>
+          <MoonStarsIcon size={iconSize} />
+        </IconContainer>
+        <IconContainer active={setting === 'system'}>
+          <CircleHalfIcon size={iconSize} />
+        </IconContainer>
+      </Button>
     </View>
   )
 }

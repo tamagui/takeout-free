@@ -53,7 +53,7 @@
     "**/ios/**",
     "**/android/**",
     "**/dist/**",
-    "**/tamagui.css",
+    "**/*.generated.**",
     "**/.ultra.cache.json",
     "**/tsconfig.json",
     "**/bun.lock",

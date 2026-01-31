@@ -1,245 +1,127 @@
-import { createGlobalContext, useAsyncEffect } from '@take-out/helpers'
-import { use, useEffect, useRef } from 'react'
-import {
-  DialogDescription,
-  ScrollView,
-  Separator,
-  Sheet,
-  Spacer,
-  styled,
-  Dialog as TamaguiDialog,
-  VisuallyHidden,
-  withStaticProperties,
-  XStack,
-  YStack,
-  type DialogProps,
-  type SizeTokens,
-  type TamaguiElement,
-} from 'tamagui'
+import { useState, useEffect, createContext, useContext, type ReactNode } from 'react'
+import { AlertDialog, Button, XStack, YStack } from 'tamagui'
 
-import { animationClamped } from '../animations/animationClamped'
-import { dialogEmit } from './shared'
-
-const CONTENT_RADIUS: SizeTokens = '$9'
-
-const DialogComponent = ({
-  children,
-  minH = 400,
-  minW = 450,
-  open,
-  ...props
-}: DialogProps & { minH?: number; minW?: number }) => {
-  const dialogContentRef = useRef<TamaguiElement>(null)
-
-  // simple escape key handler
-  useEffect(() => {
-    if (!open) return
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        dialogEmit({ type: 'closed' })
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [open])
-
-  useAsyncEffect(
-    (signal) => {
-      if (!open) return
-      const node = dialogContentRef.current as HTMLElement
-      if (!node) {
-        return
-      }
-      node.addEventListener(
-        'keyup',
-        (e) => {
-          if (e.code !== 'Escape') return
-          if (
-            !(
-              e.target instanceof HTMLInputElement ||
-              e.target instanceof HTMLTextAreaElement
-            )
-          )
-            return
-          if (e.target.value) return
-          dialogEmit({ type: 'closed' })
-        },
-        {
-          signal,
-        }
-      )
-    },
-    [open]
-  )
-
-  return (
-    <DialogOpenContext.Provider value={!!open}>
-      <TamaguiDialog modal open={open} {...props}>
-        <TamaguiDialog.Adapt platform="touch" when="maxSM">
-          <Sheet transition="medium" zIndex={250_000} modal dismissOnSnapToBottom>
-            <Sheet.Overlay
-              bg="$shadow4"
-              transition="quick"
-              enterStyle={{ opacity: 0 }}
-              exitStyle={{ opacity: 0 }}
-            />
-            <Sheet.Handle />
-            <Sheet.Frame p="$4" gap="$4">
-              <TamaguiDialog.Adapt.Contents />
-            </Sheet.Frame>
-          </Sheet>
-        </TamaguiDialog.Adapt>
-
-        <TamaguiDialog.Portal z={500_000}>
-          <DialogOverlay
-            key="overlay"
-            bg="$background08"
-            onPress={(e) => {
-              props.onOpenChange?.(false)
-              e.stopPropagation()
-              e.preventDefault()
-            }}
-          >
-            <YStack
-              fullscreen
-              $theme-dark={{
-                bg: '$color2',
-              }}
-              $theme-light={{
-                bg: '$shadow4',
-              }}
-              opacity={0.8}
-            />
-          </DialogOverlay>
-
-          <DialogContent
-            ref={dialogContentRef}
-            minH={minH}
-            minW={minW}
-            key="content"
-            rounded={CONTENT_RADIUS}
-            overflow="hidden"
-          >
-            {children}
-          </DialogContent>
-        </TamaguiDialog.Portal>
-      </TamaguiDialog>
-    </DialogOpenContext.Provider>
-  )
+type DialogState = {
+  type: 'error' | 'confirm' | null
+  title: string
+  description: string
+  resolve?: (value: boolean) => void
 }
 
-const DialogOverlay = styled(TamaguiDialog.Overlay, {
-  transition: animationClamped('quickerLessBouncy'),
-  opacity: 1,
-  backdropFilter: 'blur(3px)',
-  enterStyle: { opacity: 0 },
-  exitStyle: { opacity: 0 },
-})
+let globalShowDialog: ((state: Omit<DialogState, 'resolve'> & { resolve?: (value: boolean) => void }) => void) | null = null
 
-const DialogContent = styled(TamaguiDialog.Content, {
-  unstyled: true,
-  z: 1000000,
-  transition: animationClamped('quickerLessBouncy'),
-  bg: 'transparent',
-  borderWidth: 0.5,
-  rounded: CONTENT_RADIUS,
-  borderColor: '$color3',
-  position: 'relative',
-  backdropFilter: 'blur(25px)',
-  shadowColor: '$shadow3',
-  shadowRadius: 20,
-  shadowOffset: { height: 20, width: 0 },
-  maxH: '90vh',
-  width: '60%',
-  minW: 200,
-  maxW: 500,
-  p: '$4',
-  opacity: 1,
-  y: 0,
-  enterStyle: { x: 0, y: -5, opacity: 0, scale: 0.985 },
-  exitStyle: { x: 0, y: 5, opacity: 0 },
+export function DialogProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<DialogState>({ type: null, title: '', description: '' })
 
-  focusStyle: {
-    outlineWidth: 2,
-    outlineColor: '$background02',
-    outlineStyle: 'solid',
-  },
-})
-
-const DialogTitle = styled(TamaguiDialog.Title, {
-  fontFamily: '$mono',
-  size: '$5',
-  text: 'center',
-})
-
-const DialogHeader = ({
-  title,
-  description,
-  hidden,
-}: {
-  hidden?: boolean
-  title?: string
-  description?: string
-}) => {
-  const content = (
-    <YStack pointerEvents="box-none" gap="$3" mb="$3">
-      <DialogTitle size="$6" fontWeight="600" cursor="default" select="none">
-        {title}
-      </DialogTitle>
-      <DialogDescription size="$4" color="$color10">
-        {description}
-      </DialogDescription>
-    </YStack>
-  )
-
-  if (hidden) {
-    return <VisuallyHidden>{content}</VisuallyHidden>
+  const showDialog = (newState: Omit<DialogState, 'resolve'> & { resolve?: (value: boolean) => void }) => {
+    setState({ ...newState, resolve: newState.resolve } as DialogState)
   }
 
-  return content
-}
+  useEffect(() => {
+    globalShowDialog = showDialog
+    return () => {
+      globalShowDialog = null
+    }
+  }, [])
 
-const DialogFooter = (props: { children: any }) => {
+  const handleClose = (confirmed: boolean) => {
+    state.resolve?.(confirmed)
+    setState({ type: null, title: '', description: '' })
+  }
+
   return (
     <>
-      <Spacer flex={1} />
-      <YStack gap="$3">
-        <Separator opacity={0.5} />
-        <XStack justify="flex-end" gap="$2">
-          {props.children}
-        </XStack>
-      </YStack>
+      {children}
+      <AlertDialog open={state.type !== null} onOpenChange={(open) => !open && handleClose(false)}>
+        <AlertDialog.Portal>
+          <AlertDialog.Overlay
+            key="overlay"
+            opacity={0.5}
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
+          />
+          <AlertDialog.Content
+            bordered
+            elevate
+            key="content"
+            enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
+            exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+            x={0}
+            scale={1}
+            opacity={1}
+            y={0}
+            width="90%"
+            maxW={400}
+          >
+            <YStack gap="$4">
+              <AlertDialog.Title size="$6">{state.title}</AlertDialog.Title>
+              <AlertDialog.Description size="$3" color="$color11">
+                {state.description}
+              </AlertDialog.Description>
+
+              <XStack gap="$3" justify="flex-end">
+                {state.type === 'confirm' ? (
+                  <>
+                    <AlertDialog.Cancel asChild>
+                      <Button onPress={() => handleClose(false)}>Cancel</Button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action asChild>
+                      <Button theme="blue" onPress={() => handleClose(true)}>
+                        Confirm
+                      </Button>
+                    </AlertDialog.Action>
+                  </>
+                ) : (
+                  <AlertDialog.Action asChild>
+                    <Button theme="blue" onPress={() => handleClose(false)}>
+                      OK
+                    </Button>
+                  </AlertDialog.Action>
+                )}
+              </XStack>
+            </YStack>
+          </AlertDialog.Content>
+        </AlertDialog.Portal>
+      </AlertDialog>
     </>
   )
 }
 
-const DialogBody = (props: { children: any; scrollable?: boolean }) => {
-  const content = (
-    <YStack flex={1} gap="$2" px="$1" pb="$3">
-      {props.children}
-    </YStack>
-  )
+export const showError = (error: unknown, title = 'Error') => {
+  let description = 'An unexpected error occurred'
 
-  if (props.scrollable) {
-    return (
-      <ScrollView m="$-1">
-        {/* add some extra bottom pad so it scrolls more naturally to bottom */}
-        <YStack gap="$2" px="$1">
-          {content}
-        </YStack>
-      </ScrollView>
-    )
+  if (error instanceof Error) {
+    description = error.message
+  } else if (typeof error === 'string') {
+    description = error
+  } else if (error && typeof error === 'object' && 'message' in error) {
+    description = String(error.message)
   }
 
-  return content
+  if (globalShowDialog) {
+    globalShowDialog({ type: 'error', title, description })
+  } else {
+    console.error(`${title}: ${description}`)
+  }
 }
 
-export const Dialog = withStaticProperties(DialogComponent, {
-  Header: DialogHeader,
-  Body: DialogBody,
-  Footer: DialogFooter,
-  Close: TamaguiDialog.Close,
-})
+export const dialogConfirm = async (props: {
+  title?: string
+  description?: string
+}): Promise<boolean> => {
+  const { title = 'Confirm', description = 'Are you sure?' } = props
 
-const DialogOpenContext = createGlobalContext('dialog/open-context', false)
-export const useDialogOpen = () => use(DialogOpenContext)
+  if (!globalShowDialog) {
+    console.warn('DialogProvider not mounted, returning false')
+    return false
+  }
+
+  return new Promise<boolean>((resolve) => {
+    globalShowDialog!({
+      type: 'confirm',
+      title,
+      description,
+      resolve,
+    })
+  })
+}

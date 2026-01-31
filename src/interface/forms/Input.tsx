@@ -1,51 +1,19 @@
-import { memo } from 'react'
-import { Input as TamaguiInput } from 'tamagui'
+import { Input as TamaguiInput, styled, type GetProps, type TamaguiElement } from 'tamagui'
 
-import { useIsDark } from '~/features/theme/useIsDark'
+export const Input = styled(TamaguiInput, {
+  height: 50,
+  size: '$5',
+  borderWidth: 0.5,
+  placeholderTextColor: '$color8',
 
-import { GlassView } from '../effects/GlassView'
-
-import type { RefObject } from 'react'
-import type { GetProps, TamaguiElement, ViewProps } from 'tamagui'
-
-export type InputProps = GetProps<typeof TamaguiInput> & {
-  ref?: RefObject<TamaguiElement | null>
-  glass?: boolean
-}
-
-export type Input = TamaguiElement
-
-export const Input = memo(({ ref, glass, ...props }: InputProps) => {
-  const isDark = useIsDark()
-
-  const inputElement = (
-    <TamaguiInput
-      borderWidth={glass ? 0 : 0.5}
-      ref={ref}
-      focusVisibleStyle={inputFocusStyle}
-      bg={glass ? 'transparent' : undefined}
-      placeholderTextColor="$color8"
-      height={50}
-      size="$5"
-      {...props}
-    />
-  )
-  if (glass) {
-    return (
-      <GlassView borderRadius={14} intensity={40} tint={isDark ? 'dark' : 'light'}>
-        {inputElement}
-      </GlassView>
-    )
-  }
-
-  return inputElement
+  focusVisibleStyle: {
+    outlineWidth: 3,
+    outlineStyle: 'solid',
+    outlineColor: '$background04',
+    outlineOffset: 1,
+    borderWidth: 0.5,
+    borderColor: '$color5',
+  },
 })
 
-export const inputFocusStyle = {
-  outlineWidth: 3,
-  outlineStyle: 'solid',
-  outlineColor: '$background04',
-  outlineOffset: 1,
-  borderWidth: 0.5,
-  borderColor: '$color5',
-} satisfies ViewProps['focusVisibleStyle']
+export type InputProps = GetProps<typeof Input>

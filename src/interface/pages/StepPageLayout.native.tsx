@@ -1,10 +1,10 @@
 import { router } from 'one'
 import { H5, Spacer, XStack, YStack } from 'tamagui'
 
-import { ButtonSimple } from '../buttons/ButtonSimple'
+import { Button } from '../buttons/Button'
 import { CaretLeftIcon } from '../icons/phosphor/CaretLeftIcon'
-import { PageHeading } from '../text/PageHeading'
-import { BaseStepPageLayout } from './BaseStepPageLayout'
+import { H1, H4 } from '../text/Headings'
+import { GradientBackground } from '../backgrounds/GradientBackground'
 
 import type { StepPageProps } from './StepPageLayout'
 
@@ -20,52 +20,49 @@ export const StepPageLayout = ({
   buttonRight,
   disableBackButton = false,
   hideBackButton = false,
-  disableScroll = false,
-  disableKeyboardAvoidingView = false,
-  keyboardOffset = 0,
 }: StepPageProps) => {
   return (
-    <BaseStepPageLayout
-      bottom={bottom}
-      disableScroll={disableScroll}
-      disableKeyboardAvoidingView={disableKeyboardAvoidingView}
-      hideBackButton={hideBackButton}
-      keyboardOffset={keyboardOffset}
-    >
-      <YStack gap="$4">
-        {!hideBackButton && (
-          <XStack justify="space-between" items="center">
-            <ButtonSimple
-              size="large"
-              glass
-              circular
-              onPress={() => router.back()}
-              icon={<CaretLeftIcon size={22} color="$color12" />}
-              disabled={disableBackButton}
-            />
-            {headerTitle && (
-              <H5 fontFamily="$heading" color="$color12">
-                {headerTitle}
-              </H5>
-            )}
-            {buttonRight ? buttonRight : <Spacer width={42} />}
-          </XStack>
-        )}
+    <GradientBackground>
+      <YStack flex={1} p="$4">
+        <YStack gap="$4">
+          {!hideBackButton && (
+            <XStack justify="space-between" items="center">
+              <Button
+                circular
+                onPress={() => router.back()}
+                icon={<CaretLeftIcon size={22} color="$color12" />}
+                disabled={disableBackButton}
+              />
+              {headerTitle && (
+                <H5 fontFamily="$heading" color="$color12">
+                  {headerTitle}
+                </H5>
+              )}
+              {buttonRight ? buttonRight : <Spacer width={42} />}
+            </XStack>
+          )}
 
-        <YStack gap="$4" mt="$2">
-          {IconGroup && IconGroup}
+          <YStack gap="$4" mt="$2">
+            {IconGroup && IconGroup}
 
-          <PageHeading
-            title={title}
-            subTitle={description}
-            subTitle2={descriptionSecondLine}
-          />
+            <YStack gap="$2">
+              <H1 size="$8">{title}</H1>
+              {description && <H4 color="$color10">{description}</H4>}
+              {descriptionSecondLine && (
+                <H4 color="$color11" fontWeight="600">
+                  {descriptionSecondLine}
+                </H4>
+              )}
+            </YStack>
+          </YStack>
         </YStack>
-      </YStack>
 
-      <YStack pt="$4" gap="$4">
-        {children}
+        <YStack pt="$4" gap="$4" flex={1}>
+          {children}
+        </YStack>
+
+        {bottom && <YStack pt="$4">{bottom}</YStack>}
       </YStack>
-    </BaseStepPageLayout>
+    </GradientBackground>
   )
 }

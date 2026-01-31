@@ -3,7 +3,7 @@ import { memo, useLayoutEffect, useRef, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { SizableText, Spinner, useEvent, XStack, YStack } from 'tamagui'
 
-import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { Button } from '~/interface/buttons/Button'
 import { Pressable } from '~/interface/buttons/Pressable'
 import { showError } from '~/interface/dialogs/actions'
 import { Input } from '~/interface/forms/Input'
@@ -18,7 +18,7 @@ export const SignupPage = memo(() => {
   }>()
   const { top } = useSafeAreaInsets()
   const router = useRouter()
-  const inputRef = useRef<Input>(null)
+  const inputRef = useRef<any>(null)
   const [inputValue, setInputValue] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -26,7 +26,7 @@ export const SignupPage = memo(() => {
 
   useLayoutEffect(() => {
     const timer = setTimeout(() => {
-      inputRef.current?.focus()
+      inputRef.current?.focus?.()
     }, 650)
 
     return () => clearTimeout(timer)
@@ -87,7 +87,6 @@ export const SignupPage = memo(() => {
         <YStack gap="$4" mt="$4">
           <Input
             data-testid="email-input"
-            glass
             ref={inputRef}
             placeholder="Enter email address"
             value={inputValue}
@@ -100,10 +99,9 @@ export const SignupPage = memo(() => {
             inputMode="email"
           />
 
-          <ButtonSimple
-            glass
+          <Button
             data-testid="next-button"
-            size="large"
+            size="$5"
             pressStyle={{
               scale: 0.97,
               opacity: 0.9,
@@ -112,7 +110,7 @@ export const SignupPage = memo(() => {
             disabled={isDisabled || loading}
           >
             {loading ? <Spinner size="small" /> : 'Next'}
-          </ButtonSimple>
+          </Button>
         </YStack>
       </YStack>
     </PageLayout>

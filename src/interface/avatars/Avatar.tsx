@@ -4,7 +4,21 @@ import { Circle, styled, YStack, type CircleProps } from 'tamagui'
 import { Image } from '~/interface/image/Image'
 
 import { UserIcon } from '../icons/phosphor/UserIcon'
-import { getSimpleSize, type SimpleSize } from './sizes'
+
+export type SimpleSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+
+const simpleSizes: Record<SimpleSize, number> = {
+  xs: 24,
+  sm: 28,
+  md: 36,
+  lg: 48,
+  xl: 64,
+}
+
+function getSimpleSize(size: number | SimpleSize): number {
+  if (typeof size === 'number') return size
+  return simpleSizes[size] ?? 28
+}
 
 export type AvatarProps = Omit<CircleProps, 'size'> & {
   image: string | null | undefined

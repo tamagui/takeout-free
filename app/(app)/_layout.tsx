@@ -2,11 +2,9 @@ import { Redirect, Slot, Stack, usePathname } from 'one'
 import { Configuration } from 'tamagui'
 
 import { useAuth } from '~/features/auth/client/authClient'
-import { Dialogs } from '~/interface/dialogs/Dialogs'
-import { NotificationProvider } from '~/interface/notification/Notification'
+import { DialogProvider } from '~/interface/dialogs/Dialog'
 import { PlatformSpecificRootProvider } from '~/interface/platform/PlatformSpecificRootProvider'
 import { ToastProvider } from '~/interface/toast/Toast'
-import { animationsApp } from '~/tamagui/animationsApp'
 import { ProvideZero } from '~/zero/client'
 
 export function AppLayout() {
@@ -30,11 +28,10 @@ export function AppLayout() {
   }
 
   return (
-    // our app is SPA from here on down, we avoid extra work by disabling SSR
-    <Configuration disableSSR animationDriver={animationsApp}>
+    <Configuration disableSSR>
       <ProvideZero>
         <ToastProvider>
-          <NotificationProvider>
+          <DialogProvider>
             <PlatformSpecificRootProvider>
               {process.env.VITE_PLATFORM === 'web' ? (
                 <Slot />
@@ -45,9 +42,8 @@ export function AppLayout() {
                   <Stack.Screen name="auth" />
                 </Stack>
               )}
-              <Dialogs />
             </PlatformSpecificRootProvider>
-          </NotificationProvider>
+          </DialogProvider>
         </ToastProvider>
       </ProvideZero>
     </Configuration>

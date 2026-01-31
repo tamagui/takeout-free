@@ -2,10 +2,7 @@ import { router } from 'one'
 import { Circle, H5, isWeb, Spacer, XStack, YStack } from 'tamagui'
 
 import { HeaderBackButton } from '../buttons/HeaderBackButton'
-import { Pressable } from '../buttons/Pressable'
-import { CaretLeftIcon } from '../icons/phosphor/CaretLeftIcon'
-import { PageHeading } from '../text/PageHeading'
-import { BaseStepPageLayout } from './BaseStepPageLayout'
+import { H1, H4 } from '../text/Headings'
 
 import type { IconComponent } from '../icons/types'
 import type { ReactNode } from 'react'
@@ -40,18 +37,9 @@ export const StepPageLayout = ({
   buttonRight,
   disableBackButton = false,
   hideBackButton = false,
-  disableScroll = false,
-  disableKeyboardAvoidingView = false,
-  keyboardOffset = 0,
 }: StepPageProps) => {
   return (
-    <BaseStepPageLayout
-      bottom={bottom}
-      disableScroll={disableScroll}
-      disableKeyboardAvoidingView={disableKeyboardAvoidingView}
-      hideBackButton={hideBackButton}
-      keyboardOffset={keyboardOffset}
-    >
+    <YStack flex={1} p="$4" maxW={500} mx="auto" width="100%">
       <YStack gap="$5">
         {!hideBackButton && !isWeb && (
           <XStack justify="space-between" items="center">
@@ -80,17 +68,23 @@ export const StepPageLayout = ({
 
           {IconGroup && IconGroup}
 
-          <PageHeading
-            title={title}
-            subTitle={description}
-            subTitle2={descriptionSecondLine}
-          />
+          <YStack gap="$2">
+            <H1 size="$8">{title}</H1>
+            {description && <H4 color="$color10">{description}</H4>}
+            {descriptionSecondLine && (
+              <H4 color="$color11" fontWeight="600">
+                {descriptionSecondLine}
+              </H4>
+            )}
+          </YStack>
         </YStack>
       </YStack>
 
       <YStack pt="$5" gap="$4">
         {children}
       </YStack>
-    </BaseStepPageLayout>
+
+      {bottom && <YStack pt="$4">{bottom}</YStack>}
+    </YStack>
   )
 }

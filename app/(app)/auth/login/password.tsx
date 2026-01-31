@@ -4,7 +4,7 @@ import { Keyboard } from 'react-native'
 import { YStack } from 'tamagui'
 
 import { passwordLogin } from '~/features/auth/client/passwordLogin'
-import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { Button } from '~/interface/buttons/Button'
 import { showError } from '~/interface/dialogs/actions'
 import { Input } from '~/interface/forms/Input'
 import { PasswordIcon } from '~/interface/icons/phosphor/PasswordIcon'
@@ -51,15 +51,14 @@ export const PasswordPage = () => {
       descriptionSecondLine={displayValue}
       bottom={
         <KeyboardStickyFooter openedOffset={-10}>
-          <ButtonSimple
+          <Button
             data-testid="submit-password-button"
-            size="large"
+            size="$5"
             onPress={handleContinue}
             disabled={!password || loading}
-            variant="default"
           >
-            <ButtonSimple.Text>{loading ? 'Verifying...' : 'Next'}</ButtonSimple.Text>
-          </ButtonSimple>
+            {loading ? 'Verifying...' : 'Next'}
+          </Button>
         </KeyboardStickyFooter>
       }
     >

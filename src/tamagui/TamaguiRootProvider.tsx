@@ -1,4 +1,4 @@
-import './tamagui.css'
+import './tamagui.generated.css'
 
 import { MetaTheme, SchemeProvider, useUserScheme } from '@vxrn/color-scheme'
 import { type ReactNode } from 'react'

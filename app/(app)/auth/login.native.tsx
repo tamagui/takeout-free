@@ -12,7 +12,7 @@ import { signInAsDemo } from '~/features/auth/client/signInAsDemo'
 import { isDemoMode } from '~/helpers/isDemoMode'
 import { Link } from '~/interface/app/Link'
 import { GradientBackground } from '~/interface/backgrounds/GradientBackground'
-import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { Button } from '~/interface/buttons/Button'
 import { AppleIcon } from '~/interface/icons/AppleIcon'
 import { GoogleIcon } from '~/interface/icons/GoogleIcon'
 import { Image } from '~/interface/image/Image'
@@ -37,10 +37,8 @@ export const LoginPage = () => {
         </H2>
         <YStack gap="$3" mt="$4">
           <Link href="/auth/signup/email" asChild>
-            <ButtonSimple
-              size="large"
-              glass
-              glassTint="orange"
+            <Button
+              size="$5"
               pressStyle={{
                 scale: 0.97,
                 opacity: 0.9,
@@ -50,15 +48,13 @@ export const LoginPage = () => {
               enterStyle={{ opacity: 0, scale: 0.95 }}
             >
               Continue with Email
-            </ButtonSimple>
+            </Button>
           </Link>
 
           {/* DEMO mode - enabled in dev or when VITE_DEMO_MODE=1 */}
           {isDemoMode && (
-            <ButtonSimple
-              size="large"
-              glass
-              glassTint="mediumpurple"
+            <Button
+              size="$5"
               onPress={async () => {
                 setDemoLoading(true)
                 try {
@@ -89,12 +85,11 @@ export const LoginPage = () => {
               enterStyle={{ opacity: 0, scale: 0.95 }}
             >
               {demoLoading ? <Spinner size="small" /> : 'Login as Demo User'}
-            </ButtonSimple>
+            </Button>
           )}
           <XStack width="100%" gap="$3" justify="center">
-            <ButtonSimple
-              glass
-              size="large"
+            <Button
+              size="$5"
               onPress={() => handleSocialLogin('google')}
               pressStyle={{
                 scale: 0.97,
@@ -108,9 +103,8 @@ export const LoginPage = () => {
               icon={<GoogleIcon size={18} />}
             />
 
-            <ButtonSimple
-              glass
-              size="large"
+            <Button
+              size="$5"
               onPress={() => handleSocialLogin('apple')}
               pressStyle={{
                 scale: 0.97,

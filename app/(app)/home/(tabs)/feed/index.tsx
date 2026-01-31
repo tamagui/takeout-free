@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { SizableText, Spinner, Theme, XStack, YStack } from 'tamagui'
 
 import { useTodos } from '~/features/todo/useTodos'
-import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { Button } from '~/interface/buttons/Button'
 import { Input } from '~/interface/forms/Input'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { H1, H3 } from '~/interface/text/Headings'
@@ -25,7 +25,7 @@ export const HomePage = memo(() => {
       width="100vw"
       ml="50%"
       transform="translateX(-50%)"
-      minHeight="100vh"
+      minH="100vh"
     >
       {/* notice banner */}
       <Theme name="yellow">
@@ -44,7 +44,7 @@ export const HomePage = memo(() => {
         gap="$6"
         px="$4"
         width="100%"
-        maxWidth={1200}
+        maxW={1200}
         mx="auto"
         flexDirection="column"
         $lg={{ flexDirection: 'row' }}
@@ -65,9 +65,9 @@ export const HomePage = memo(() => {
               size="$6"
               height={56}
             />
-            <ButtonSimple onPress={handleAddTodo} theme="blue" px="$5">
+            <Button onPress={handleAddTodo} theme="blue" px="$5">
               Add
-            </ButtonSimple>
+            </Button>
           </XStack>
 
           {isLoading ? (
@@ -115,9 +115,9 @@ export const HomePage = memo(() => {
                   >
                     {todo.text}
                   </SizableText>
-                  <ButtonSimple theme="red" px="$3" onPress={() => deleteTodo(todo.id)}>
+                  <Button theme="red" px="$3" onPress={() => deleteTodo(todo.id)}>
                     ✕
-                  </ButtonSimple>
+                  </Button>
                 </XStack>
               ))}
             </YStack>

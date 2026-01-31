@@ -1,7 +1,8 @@
 import { Link, type Href } from 'one'
-import { ScrollView, SizableText, View, XStack, YStack } from 'tamagui'
+import { Linking, Platform } from 'react-native'
+import { isWeb, ScrollView, SizableText, View, XStack, YStack } from 'tamagui'
 
-import { APP_NAME_LOWERCASE } from '~/constants/app'
+import { APP_NAME_LOWERCASE, DOMAIN } from '~/constants/app'
 import { useLogout } from '~/features/auth/useLogout'
 import { CaretRightIcon } from '~/interface/icons/phosphor/CaretRightIcon'
 import { DoorIcon } from '~/interface/icons/phosphor/DoorIcon'

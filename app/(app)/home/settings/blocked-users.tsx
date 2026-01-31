@@ -1,7 +1,7 @@
 import { useRouter } from 'one'
 import { H1, SizableText, YStack } from 'tamagui'
 
-import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { Button } from '~/interface/buttons/Button'
 import { PageLayout } from '~/interface/pages/PageLayout'
 
 export default function BlockedUsersPage() {
@@ -14,9 +14,9 @@ export default function BlockedUsersPage() {
         <SizableText color="$color10" text="center">
           You haven't blocked any users.
         </SizableText>
-        <ButtonSimple size="large" onPress={() => router.back()}>
+        <Button size="$5" onPress={() => router.back()}>
           Go Back
-        </ButtonSimple>
+        </Button>
       </YStack>
     </PageLayout>
   )

@@ -6,7 +6,7 @@ import { useAuth } from '~/features/auth/client/authClient'
 import { useLogout } from '~/features/auth/useLogout'
 import { Logo } from '~/interface/app/Logo'
 import { Avatar } from '~/interface/avatars/Avatar'
-import { ButtonSimple } from '~/interface/buttons/ButtonSimple'
+import { Button } from '~/interface/buttons/Button'
 import { ScrollHeader } from '~/interface/headers/ScrollHeader'
 import { DoorIcon } from '~/interface/icons/phosphor/DoorIcon'
 import { GearIcon } from '~/interface/icons/phosphor/GearIcon'
@@ -45,19 +45,18 @@ export const MainHeader = () => {
 
             <XStack gap="$2.5" items="center" display="none" $md={{ display: 'flex' }}>
               {user && (
-                <ButtonSimple size="medium" circular cursor="pointer">
+                <Button circular cursor="pointer">
                   <Avatar
                     disableBorder
                     size={28}
                     image={user.image}
                     name={user.name ?? 'User'}
                   />
-                </ButtonSimple>
+                </Button>
               )}
 
               <ThemeSwitch />
-              <ButtonSimple
-                size="medium"
+              <Button
                 circular
                 onPress={() => router.push('/home/settings')}
                 icon={<GearIcon size={18} />}
@@ -84,8 +83,7 @@ export const MainHeaderMenu = memo(() => {
   }
   return (
     <>
-      <ButtonSimple
-        size="large"
+      <Button
         variant="transparent"
         circular
         icon={<ListIcon size="$1" />}
