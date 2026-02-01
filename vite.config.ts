@@ -25,7 +25,7 @@ export default {
     // @rocicorp/zero must be external to prevent Symbol mismatch between
     // @rocicorp/zero and @rocicorp/zero/server - they share queryInternalsTag
     // Symbol that must be the same instance for query transforms to work
-    external: ['over-zero', '@vxrn/mdx', '@rocicorp/zero'],
+    external: ['on-zero', '@vxrn/mdx', '@rocicorp/zero'],
   },
 
   plugins: [

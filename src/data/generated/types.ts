@@ -1,5 +1,5 @@
 import type * as schema from './tables'
-import type { TableInsertRow, TableUpdateRow } from 'over-zero'
+import type { TableInsertRow, TableUpdateRow } from 'on-zero'
 
 export type Todo = TableInsertRow<typeof schema.todo>
 export type TodoUpdate = TableUpdateRow<typeof schema.todo>

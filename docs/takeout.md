@@ -57,7 +57,7 @@ the browser with support for nested drop areas.
 
 ## Zero Integration
 
-Zero provides the real-time sync foundation. We've built the `over-zero` package
+Zero provides the real-time sync foundation. We've built the `on-zero` package
 which adds tons of nice helpers on top, and gotten a nice setup for Zero that
 makes managing it, debugging it and deploying it easier.
 

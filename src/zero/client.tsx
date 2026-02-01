@@ -1,6 +1,6 @@
 import { dropAllDatabases } from '@rocicorp/zero'
 import { useZero } from '@rocicorp/zero/react'
-import { createZeroClient } from 'over-zero'
+import { createZeroClient } from 'on-zero'
 import { memo, useEffect, useMemo, type ReactNode } from 'react'
 import { isClient, isWeb } from 'tamagui'
 

@@ -39,7 +39,7 @@
     "test:integration": "bun run env:dev bun --cwd=./src/test playwright test",
     "test:unit": "bun run:dev vitest run -c ./src/test/vitest.config.ts",
     "test": "bun run test:unit && bun run test:integration",
-    "zero:generate": "over-zero generate --after 'bun lint:fix'"
+    "zero:generate": "on-zero generate --after 'bun lint:fix'"
   },
   "overrides": {
     "@expo/fingerprint": "0.15.3"
@@ -83,7 +83,7 @@
     "jose": "^6.0.11",
     "motion": "^12.23.26",
     "one": "^1.2.96",
-    "over-zero": "^0.0.52",
+    "on-zero": "0.0.1",
     "pg": "^8.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",

@@ -7,7 +7,7 @@
 import { $ } from 'bun'
 
 const PACKAGES: Record<string, string[]> = {
-  takeout: ['@take-out/*', 'over-zero'],
+  takeout: ['@take-out/*', 'on-zero'],
   tamagui: ['tamagui', '@tamagui/*'],
   one: ['one', '@vxrn/*'],
   zero: ['@rocicorp/zero'],

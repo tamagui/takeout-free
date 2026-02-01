@@ -1,7 +1,7 @@
 import { number, string, table } from '@rocicorp/zero'
-import { mutations, serverWhere } from 'over-zero'
+import { mutations, serverWhere } from 'on-zero'
 
-import type { TableInsertRow } from 'over-zero'
+import type { TableInsertRow } from 'on-zero'
 
 export type User = TableInsertRow<typeof schema>
 
