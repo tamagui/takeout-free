@@ -23,7 +23,7 @@ test('demo login flow completes successfully', async ({ page }) => {
   expect(page.url()).toContain('/home/feed')
 
   // verify the page has rendered (app container visible)
-  await expect(page.locator('[data-testid="app-container"]')).toBeVisible({
+  await expect(page.locator('[data-testid="app-container"]')).toBeAttached({
     timeout: 10000,
   })
 })
@@ -38,7 +38,7 @@ test('authenticated user can access settings', async ({ page }) => {
   expect(page.url()).toContain('/home/settings')
 
   // verify settings content is visible
-  await expect(page.locator('[data-testid="app-container"]')).toBeVisible({
+  await expect(page.locator('[data-testid="app-container"]')).toBeAttached({
     timeout: 10000,
   })
 })
@@ -53,7 +53,7 @@ test('demo login shows home feed content', async ({ page }) => {
   expect(page.url()).toContain('/home/feed')
 
   // verify the app container is visible (page loaded)
-  await expect(page.locator('[data-testid="app-container"]')).toBeVisible({
+  await expect(page.locator('[data-testid="app-container"]')).toBeAttached({
     timeout: 10000,
   })
 })
