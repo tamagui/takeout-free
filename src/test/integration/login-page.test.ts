@@ -25,8 +25,8 @@ test('login page should load without freezing', async ({ page }) => {
   // wait for content to appear (not just blank page)
   await expect(page.locator('body')).not.toBeEmpty()
 
-  // check that the app container exists
-  await expect(page.locator('[data-testid="app-container"]')).toBeVisible({
+  // check that the app container exists (uses display: contents so check attached, not visible)
+  await expect(page.locator('[data-testid="app-container"]')).toBeAttached({
     timeout: 5000,
   })
 })
