@@ -7,7 +7,7 @@ export async function getTestEnv() {
   await vxrnLoadEnv('development')
 
   const dockerHost = getDockerHost()
-  const dockerDbBase = `postgresql://user:password@127.0.0.1:5444`
+  const dockerDbBase = `postgresql://user:password@127.0.0.1:5533`
 
   return {
     CI: 'true',
@@ -18,7 +18,7 @@ export async function getTestEnv() {
     ONE_SERVER_URL: 'http://localhost:8081',
     POSTMARK_SERVER_TOKEN: process.env.POSTMARK_SERVER_TOKEN || 'test-token',
     VITE_DEMO_MODE: '1',
-    VITE_PUBLIC_ZERO_SERVER: 'http://localhost:4859',
+    VITE_PUBLIC_ZERO_SERVER: 'http://localhost:4948',
     ZERO_MUTATE_URL: `http://${dockerHost}:8081/api/zero/push`,
     ZERO_QUERY_URL: `http://${dockerHost}:8081/api/zero/pull`,
     ZERO_UPSTREAM_DB: `${dockerDbBase}/postgres`,
