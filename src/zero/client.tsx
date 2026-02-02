@@ -1,8 +1,8 @@
 import { dropAllDatabases } from '@rocicorp/zero'
 import { useZero } from '@rocicorp/zero/react'
+import { isBrowser } from '@tamagui/constants'
 import { createZeroClient } from 'on-zero'
 import { memo, useEffect, useMemo, type ReactNode } from 'react'
-import { isClient, isWeb } from 'tamagui'
 
 import { ZERO_SERVER_URL } from '~/constants/urls'
 import * as groupedQueries from '~/data/generated/groupedQueries'
@@ -47,9 +47,9 @@ export const ProvideZero = ({ children }: { children: ReactNode }) => {
     <ProvideZeroWithoutAuth
       userID={userId}
       auth={jwtToken}
-      kvStore={isWeb && isClient && userId ? 'idb' : 'mem'}
+      kvStore={isBrowser && userId ? 'idb' : 'mem'}
       authData={authData}
-      server={ZERO_SERVER_URL}
+      cacheURL={ZERO_SERVER_URL}
     >
       {children}
       <ZeroDevTools />

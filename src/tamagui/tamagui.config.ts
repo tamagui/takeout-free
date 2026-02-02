@@ -2,10 +2,12 @@ import { defaultConfig, themes } from '@tamagui/config/v5'
 import { createTamagui } from 'tamagui'
 
 import { animationsRoot } from './animationsRoot'
+import { fonts } from './fonts'
 
 export const config = createTamagui({
   ...defaultConfig,
   animations: animationsRoot,
+  fonts,
   // tamagui optimization - reduce bundle size by avoiding themes js on client
   // tamagui will hydrate it from CSS which improves lighthouse scores
   themes: process.env.VITE_ENVIRONMENT === 'client' ? ({} as typeof themes) : themes,

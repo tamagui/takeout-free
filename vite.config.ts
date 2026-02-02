@@ -1,18 +1,19 @@
 import { tamaguiPlugin } from '@tamagui/vite-plugin'
-import { one, resolvePath } from 'one/vite'
+import { one } from 'one/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 import type { UserConfig } from 'vite'
 
 export default {
-  envPrefix: ['VITE_'],
-
   server: {
     allowedHosts: ['host.docker.internal'],
-    port: 8081,
   },
 
   optimizeDeps: {
+    esbuildOptions: {
+      sourcemap: false,
+    },
+
     include: ['async-retry'],
     // @hot-updater/cli-tools contains native .node binaries (oxc-transform)
     // that esbuild can't handle - exclude from optimization
@@ -25,55 +26,49 @@ export default {
     // @rocicorp/zero must be external to prevent Symbol mismatch between
     // @rocicorp/zero and @rocicorp/zero/server - they share queryInternalsTag
     // Symbol that must be the same instance for query transforms to work
-    external: ['on-zero', '@vxrn/mdx', '@rocicorp/zero'],
+    external: [
+      'on-zero',
+      '@vxrn/mdx',
+      '@rocicorp/zero',
+      'retext',
+      'retext-smartypants',
+    ],
   },
 
   plugins: [
-    tamaguiPlugin({
-      optimize: true,
-      disableExtraction: process.env.NODE_ENV !== 'production',
-      useReactNativeWebLite: true,
-      components: ['tamagui'],
-      config: './src/tamagui/tamagui.config.ts',
-      outputCSS: './src/tamagui/tamagui.generated.css',
-    }),
+    tamaguiPlugin(
+      // see tamagui.build.ts for configuration
+    ),
 
     one({
       setupFile: {
         client: './src/setupClient.ts',
-        native: './src/setupClient.ts',
+        native: './src/setupNative.ts',
         server: './src/setupServer.ts',
       },
 
       react: {
-        compiler: true,
+        compiler: process.env.NODE_ENV === 'production',
       },
 
-      ssr: {
-        autoDepsOptimization: {
-          // TODO: add in ONE
-          exclude: ['*/react-native-fast-squircle/*'],
+      native: {
+        bundler: 'metro',
+        bundlerOptions: {
+          watchman: false,
+          babelConfigOverrides: (config) => {
+            return {
+              ...config,
+              plugins: [
+                // react compiler for automatic memoization - must run first
+                'babel-plugin-react-compiler',
+                ...(config?.plugins || []),
+                // reanimated worklet compilation - MUST be last
+                'react-native-reanimated/plugin',
+              ],
+            }
+          },
         },
       },
-
-      native: process.env.DISABLE_METRO
-        ? {}
-        : {
-            bundler: 'metro',
-            bundlerOptions: {
-              watchman: false, // had some slowness using this
-              babelConfigOverrides: (config) => {
-                return {
-                  ...config,
-                  plugins: [
-                    ...(config?.plugins || []),
-                    // reanimated worklet compilation - MUST be last
-                    'react-native-reanimated/plugin',
-                  ],
-                }
-              },
-            },
-          },
 
       router: {
         experimental: {
@@ -83,8 +78,8 @@ export default {
 
       web: {
         experimental_scriptLoading: 'after-lcp-aggressive',
-        defaultRenderMode: 'spa',
         inlineLayoutCSS: true,
+        defaultRenderMode: 'spa',
         sitemap: {
           priority: 0.5,
           changefreq: 'weekly',
@@ -93,7 +88,6 @@ export default {
             '/signup/**',
             '/profile-setup',
             '/avatar-setup',
-            '/waiting-list',
             '/settings/**',
           ],
         },

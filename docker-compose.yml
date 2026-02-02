@@ -9,7 +9,7 @@ services:
       timeout: 5s
       retries: 10
     ports:
-      - 5444:5432
+      - 5533:5432
     environment:
       POSTGRES_USER: user
       POSTGRES_DB: postgres
@@ -72,4 +72,4 @@ services:
       - ZERO_CVR_MAX_CONNS=16
       - ZERO_UPSTREAM_MAX_CONNS=32
     ports:
-      - "4859:4848"
+      - "4948:4848"
