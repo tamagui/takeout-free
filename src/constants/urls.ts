@@ -47,7 +47,16 @@ export const ZERO_SERVER_URL = (() => {
     // Default to production URL if not set
     return import.meta.env.VITE_PUBLIC_ZERO_SERVER || 'https://zero.tamagui.dev'
   } else {
-    return import.meta.env.VITE_PUBLIC_ZERO_SERVER || 'http://localhost:4859'
+    if (import.meta.env.VITE_PUBLIC_ZERO_SERVER) {
+      return import.meta.env.VITE_PUBLIC_ZERO_SERVER
+    }
+    // For native dev, use the same host as the server (Metro's IP) instead of localhost
+    try {
+      const url = new URL(serverUrl)
+      return `http://${url.hostname}:4948`
+    } catch {
+      return 'http://localhost:4948'
+    }
   }
 })()
 

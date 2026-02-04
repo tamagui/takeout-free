@@ -36,20 +36,19 @@ export const LoginPage = () => {
           Login to {APP_NAME}
         </H2>
         <YStack gap="$3" mt="$4">
-          <Link href="/auth/signup/email" asChild>
-            <Button
-              size="$5"
-              pressStyle={{
-                scale: 0.97,
-                opacity: 0.9,
-              }}
-              width="100%"
-              transition="200ms"
-              enterStyle={{ opacity: 0, scale: 0.95 }}
-            >
-              Continue with Email
-            </Button>
-          </Link>
+          <Button
+            size="$5"
+            pressStyle={{
+              scale: 0.97,
+              opacity: 0.9,
+            }}
+            width="100%"
+            transition="200ms"
+            enterStyle={{ opacity: 0, scale: 0.95 }}
+            onPress={() => router.navigate('/auth/signup/email')}
+          >
+            Continue with Email
+          </Button>
 
           {/* DEMO mode - enabled in dev or when VITE_DEMO_MODE=1 */}
           {isDemoMode && (
