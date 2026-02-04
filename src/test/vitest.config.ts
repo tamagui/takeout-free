@@ -32,7 +32,6 @@ export default defineConfig({
 
   plugins: [
     tamaguiPlugin({
-      optimize: false,
       disableExtraction: true,
       disableInitialBuild: true,
       useReactNativeWebLite: true,
