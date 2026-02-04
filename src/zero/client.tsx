@@ -41,8 +41,6 @@ export const ProvideZero = ({ children }: { children: ReactNode }) => {
     }
   }, [userId, role])
 
-  console.info(`[zero]`, { auth, jwtToken, userId, ZERO_SERVER_URL })
-
   return (
     <ProvideZeroWithoutAuth
       userID={userId}
