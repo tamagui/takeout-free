@@ -2,8 +2,8 @@
 import '@tamagui/native/setup-gesture-handler'
 import '@tamagui/native/setup-expo-linear-gradient'
 import '@tamagui/native/setup-keyboard-controller'
-
 // setup global side effects
+import '~/features/storage/setupStorage'
 import '~/helpers/crypto/polyfill'
 
 import { setupDev } from 'tamagui'

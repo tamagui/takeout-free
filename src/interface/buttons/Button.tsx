@@ -1,6 +1,7 @@
 import { Button as TamaguiButton, styled, type GetProps } from 'tamagui'
 
 export const Button = styled(TamaguiButton, {
+  render: 'button',
   borderWidth: 0,
   cursor: 'pointer',
 
