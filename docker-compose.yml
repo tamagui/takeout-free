@@ -42,7 +42,7 @@ services:
     command: node migrate-dist.js
 
   zero:
-    image: "rocicorp/zero:${ZERO_VERSION:-0.25.6}"
+    image: "rocicorp/zero:${ZERO_VERSION:-0.25.11}"
     depends_on:
       - migrate
       - pgdb
