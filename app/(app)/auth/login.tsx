@@ -26,7 +26,12 @@ export const LoginPage = () => {
   }
 
   return (
-    <YStack flex={1} minHeight="100vh" justify="center" items="center">
+    <YStack
+      flex={1}
+      justify="center"
+      items="center"
+      $platform-web={{ minHeight: '100vh' }}
+    >
       <Circle
         size={80}
         my="$4"
