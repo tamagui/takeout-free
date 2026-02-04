@@ -1,6 +1,6 @@
 import { router } from 'one'
 import { useState } from 'react'
-import { Circle, isWeb, SizableText, Spinner, View, XStack, YStack } from 'tamagui'
+import { Circle, isWeb, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
 import {
   APP_NAME,
@@ -26,13 +26,14 @@ export const LoginPage = () => {
   }
 
   return (
-    <XStack flex={1} flexBasis="auto" position="relative">
-      <YStack flex={1} justify="center" items="center">
+    <YStack flex={1} bg="$background" width="100%" minH="100vh">
+      <YStack flex={1} justify="center" items="center" p="$4">
         <Circle
           size={80}
           my="$4"
-          transition="medium"
-          enterStyle={{ scale: 0.95, opacity: 0 }}
+          bg="$color3"
+          items="center"
+          justify="center"
         >
           <LogoIcon size={42} />
         </Circle>
@@ -48,36 +49,20 @@ export const LoginPage = () => {
         >
           <H2 text="center">Login to {APP_NAME}</H2>
 
-          <YStack
-            key="welcome-content"
-            gap="$4"
-            items="center"
-            width="100%"
-            transition="medium"
-            enterStyle={{ opacity: 0, y: 10 }}
-            exitStyle={{ opacity: 0, y: -10 }}
-            position="relative"
-            overflow="hidden"
-          >
+          <YStack gap="$4" items="center" width="100%">
             <YStack width="100%" gap="$3">
-              <Link
-                href="/auth/signup/email"
-                $platform-web={{
-                  display: 'contents',
-                }}
-              >
+              <Link href="/auth/signup/email" asChild>
                 <Button
                   size="$5"
-                  theme="blue"
-                  variant="floating"
+                  bg="$blue10"
                   pressStyle={{
                     scale: 0.97,
                     opacity: 0.9,
                   }}
-                  transition="200ms"
-                  enterStyle={{ opacity: 0, scale: 0.95 }}
                 >
-                  Continue with Email
+                  <SizableText color="$blue1" fontWeight="600">
+                    Continue with Email
+                  </SizableText>
                 </Button>
               </Link>
 
@@ -102,56 +87,38 @@ export const LoginPage = () => {
                   pressStyle={{
                     scale: 0.97,
                   }}
-                  transition="200ms"
-                  enterStyle={{ opacity: 0, scale: 0.95 }}
                 >
                   {demoLoading ? <Spinner size="small" /> : 'Login as Demo User'}
                 </Button>
               )}
             </YStack>
 
-            <XStack width="100%" gap="$3" justify="center" overflow="visible">
+            <XStack width="100%" gap="$3" justify="center">
               <Button
                 size="$5"
                 onPress={() => handleSocialLogin('google')}
-                pressStyle={{
-                  scale: 0.97,
-                  bg: '$color2',
-                }}
-                hoverStyle={{
-                  bg: '$color2',
-                }}
-                transition="200ms"
-                enterStyle={{ opacity: 0, scale: 0.95 }}
                 icon={<GoogleIcon size={18} />}
+                flex={1}
               />
 
               <Button
                 size="$5"
                 onPress={() => handleSocialLogin('apple')}
-                pressStyle={{
-                  scale: 0.97,
-                  bg: '$color2',
-                }}
-                hoverStyle={{
-                  bg: '$color2',
-                }}
-                transition="200ms"
-                enterStyle={{ opacity: 0, scale: 0.95 }}
                 icon={<AppleIcon size={20} />}
+                flex={1}
               />
             </XStack>
           </YStack>
           <YStack items="center" gap="$2" mt="$4">
             <SizableText size="$3" text="center" color="$color10">
-              {` By continuing, you agree to our\n`}
+              By continuing, you agree to our{' '}
               <Link href={TERMS_OF_SERVICE_URL}>Terms of Service</Link>,{' '}
               <Link href={PRIVACY_POLICY_URL}>Privacy Policy</Link> and{' '}
-              <Link href={EULA_URL}>EULA.</Link>
+              <Link href={EULA_URL}>EULA</Link>.
             </SizableText>
           </YStack>
         </YStack>
       </YStack>
-    </XStack>
+    </YStack>
   )
 }
