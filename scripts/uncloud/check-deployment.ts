@@ -167,7 +167,9 @@ async function checkContainerHealth(containerId: string): Promise<boolean> {
     // unhealthy, starting, or other health status - not ready yet
     return false
   } catch (error) {
-    console.error(`  error checking ${containerId}: ${error}`)
+    console.error(
+      `  error checking ${containerId}: ${error instanceof Error ? error.message : String(error)}`
+    )
     return false
   }
 }

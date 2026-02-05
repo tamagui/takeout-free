@@ -94,7 +94,7 @@ async function waitForMigrations(timeoutMs = DOCKER_TIMEOUT) {
         }
         throw new Error(`migrations failed with exit ${status.ExitCode}`)
       }
-    } catch (err) {
+    } catch (err: Error) {
       if (!`${err}`.includes('JSON')) throw err
     }
 

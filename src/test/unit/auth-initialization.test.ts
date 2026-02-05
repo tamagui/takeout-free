@@ -34,9 +34,9 @@ describe('auth initialization requirements', () => {
   describe('vite.config.ts setupFile configuration', () => {
     it('should have native setup file configured', async () => {
       const { readFileSync } = await import('node:fs')
-      const { resolve } = await import('node:path')
+      const path = await import('node:path')
 
-      const viteConfigPath = resolve(process.cwd(), 'vite.config.ts')
+      const viteConfigPath = path.resolve(process.cwd(), 'vite.config.ts')
       const viteConfig = readFileSync(viteConfigPath, 'utf-8')
 
       // verify native setup file is configured
@@ -47,9 +47,9 @@ describe('auth initialization requirements', () => {
   describe('setupClient.ts imports', () => {
     it('should import crypto polyfill', async () => {
       const { readFileSync } = await import('node:fs')
-      const { resolve } = await import('node:path')
+      const path = await import('node:path')
 
-      const setupClientPath = resolve(process.cwd(), 'src/setupClient.ts')
+      const setupClientPath = path.resolve(process.cwd(), 'src/setupClient.ts')
       const setupClient = readFileSync(setupClientPath, 'utf-8')
 
       // verify it imports crypto polyfill
@@ -60,9 +60,9 @@ describe('auth initialization requirements', () => {
   describe('platformClient.native.ts', () => {
     it('should use createStorage for expo auth', async () => {
       const { readFileSync, existsSync } = await import('node:fs')
-      const { resolve } = await import('node:path')
+      const path = await import('node:path')
 
-      const clientPath = resolve(
+      const clientPath = path.resolve(
         process.cwd(),
         'src/features/auth/client/platformClient.native.ts'
       )
@@ -84,9 +84,9 @@ describe('regression: d75c598 storage change', () => {
 
   it('platformClient should not use expo-secure-store directly', async () => {
     const { readFileSync } = await import('node:fs')
-    const { resolve } = await import('node:path')
+    const path = await import('node:path')
 
-    const clientPath = resolve(
+    const clientPath = path.resolve(
       process.cwd(),
       'src/features/auth/client/platformClient.native.ts'
     )
