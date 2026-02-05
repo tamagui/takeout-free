@@ -13,7 +13,7 @@ const githubContextJson = process.argv[2]
 
 const gh = JSON.parse(githubContextJson)
 
-;(async () => {
+void (async () => {
   switch (gh.event_name) {
     case 'push': {
       const lines = []

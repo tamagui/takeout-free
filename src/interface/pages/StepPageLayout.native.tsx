@@ -1,10 +1,10 @@
 import { router } from 'one'
 import { H5, Spacer, XStack, YStack } from 'tamagui'
 
+import { GradientBackground } from '../backgrounds/GradientBackground'
 import { Button } from '../buttons/Button'
 import { CaretLeftIcon } from '../icons/phosphor/CaretLeftIcon'
 import { H1, H4 } from '../text/Headings'
-import { GradientBackground } from '../backgrounds/GradientBackground'
 
 import type { StepPageProps } from './StepPageLayout'
 

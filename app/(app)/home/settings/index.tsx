@@ -65,7 +65,7 @@ function SettingRow({ item }: { item: SettingItem }) {
           items="center"
           justify="space-between"
           hoverStyle={{ bg: '$color2' }}
-          onPress={() => Linking.openURL(`https://${DOMAIN}${item.href}`)}
+          onPress={() => Linking.openURL(`https://${DOMAIN}${item.href as string}`)}
         >
           <XStack gap="$3" items="center" flex={1}>
             {Icon && (

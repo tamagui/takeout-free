@@ -1,4 +1,9 @@
-import { Input as TamaguiInput, styled, type GetProps, type TamaguiElement } from 'tamagui'
+import {
+  Input as TamaguiInput,
+  styled,
+  type GetProps,
+  type TamaguiElement,
+} from 'tamagui'
 
 export const Input = styled(TamaguiInput, {
   height: 50,

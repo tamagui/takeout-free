@@ -8,12 +8,22 @@ type DialogState = {
   resolve?: (value: boolean) => void
 }
 
-let globalShowDialog: ((state: Omit<DialogState, 'resolve'> & { resolve?: (value: boolean) => void }) => void) | null = null
+let globalShowDialog:
+  | ((
+      state: Omit<DialogState, 'resolve'> & { resolve?: (value: boolean) => void }
+    ) => void)
+  | null = null
 
 export function DialogProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<DialogState>({ type: null, title: '', description: '' })
+  const [state, setState] = useState<DialogState>({
+    type: null,
+    title: '',
+    description: '',
+  })
 
-  const showDialog = (newState: Omit<DialogState, 'resolve'> & { resolve?: (value: boolean) => void }) => {
+  const showDialog = (
+    newState: Omit<DialogState, 'resolve'> & { resolve?: (value: boolean) => void }
+  ) => {
     setState({ ...newState, resolve: newState.resolve } as DialogState)
   }
 
@@ -32,7 +42,10 @@ export function DialogProvider({ children }: { children: ReactNode }) {
   return (
     <>
       {children}
-      <AlertDialog open={state.type !== null} onOpenChange={(open) => !open && handleClose(false)}>
+      <AlertDialog
+        open={state.type !== null}
+        onOpenChange={(open) => !open && handleClose(false)}
+      >
         <AlertDialog.Portal>
           <AlertDialog.Overlay
             key="overlay"

@@ -22,7 +22,7 @@ export async function validateToken(token: string) {
 
     return payload
   } catch (error) {
-    throw new InvalidTokenError(`${error}`)
+    throw new InvalidTokenError(error instanceof Error ? error.message : String(error))
   }
 }
 

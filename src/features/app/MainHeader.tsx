@@ -78,7 +78,7 @@ export const MainHeaderMenu = memo(() => {
   const { logout } = useLogout()
 
   const handleLogout = () => {
-    logout()
+    void logout()
     setOpen(false)
   }
   return (

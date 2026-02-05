@@ -76,7 +76,7 @@ export const Link = ({
             routes: resetStack.routes as any,
           })
         } else {
-          const routeName = href.toString().replace(/^\//, '')
+          const routeName = (href as string).replace(/^\//, '')
           navigation.reset({
             index: 0,
             routes: [{ key: routeName, name: routeName } as any],

@@ -35,7 +35,7 @@ export function authAPIHandler(method: 'GET' | 'POST') {
           )
 
           if (process.env.DEBUG || signInRes.status >= 400) {
-            prettyPrintResponse(signInRes)
+            void prettyPrintResponse(signInRes)
           }
 
           return signInRes
@@ -44,7 +44,7 @@ export function authAPIHandler(method: 'GET' | 'POST') {
         console.info(`[auth] ${method} ${res.status}`, req.url)
 
         if (process.env.DEBUG || res.status >= 400) {
-          prettyPrintResponse(res)
+          void prettyPrintResponse(res)
         }
 
         return res
@@ -56,7 +56,7 @@ export function authAPIHandler(method: 'GET' | 'POST') {
       const processedResponse = await handleAuthCallback(req, res)
 
       if (process.env.DEBUG || processedResponse.status >= 400) {
-        prettyPrintResponse(processedResponse)
+        void prettyPrintResponse(processedResponse)
       }
 
       return processedResponse
@@ -65,7 +65,9 @@ export function authAPIHandler(method: 'GET' | 'POST') {
       if (err instanceof Error) {
         console.error('Error stack:', err.stack)
       }
-      return new Response(`Error: ${err}`, { status: 500 })
+      return new Response(`Error: ${err instanceof Error ? err.message : String(err)}`, {
+        status: 500,
+      })
     }
   }
 }

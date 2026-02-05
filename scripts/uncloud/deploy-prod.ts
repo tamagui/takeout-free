@@ -242,7 +242,7 @@ async function uploadOriginCACerts(host: string, sshKey: string): Promise<void> 
     console.info(pc.gray('  certs available at /config/certs inside caddy container'))
   } catch (err) {
     console.warn(pc.yellow('⚠️  failed to upload origin ca certs'))
-    console.warn(pc.gray(`   ${err instanceof Error ? err.message : err}`))
+    console.warn(pc.gray(`   ${err instanceof Error ? err.message : String(err)}`))
     console.warn(pc.gray("   falling back to let's encrypt"))
   }
 }
@@ -291,7 +291,7 @@ async function deployCaddyWithTLS(host: string, sshKey: string): Promise<void> {
     console.info(pc.green('✓ caddy deployed with origin ca certificates'))
   } catch (err) {
     console.warn(pc.yellow('⚠️  failed to deploy caddy with custom config'))
-    console.warn(pc.gray(`   ${err instanceof Error ? err.message : err}`))
+    console.warn(pc.gray(`   ${err instanceof Error ? err.message : String(err)}`))
     console.warn(
       pc.gray('   you may need to run: uc caddy deploy --caddyfile src/uncloud/Caddyfile')
     )

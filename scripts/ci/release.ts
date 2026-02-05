@@ -238,7 +238,7 @@ async function waitForBackend() {
         console.info('Migrations still running...')
       }
     } catch (err) {
-      if (`${err}`.includes('JSON Parse')) {
+      if (String(err).includes('JSON Parse')) {
         continue
       }
       throw err
