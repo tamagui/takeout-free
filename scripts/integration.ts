@@ -94,8 +94,9 @@ async function waitForMigrations(timeoutMs = DOCKER_TIMEOUT) {
         }
         throw new Error(`migrations failed with exit ${status.ExitCode}`)
       }
-    } catch (err: Error) {
-      if (!`${err}`.includes('JSON')) throw err
+    } catch (err: unknown) {
+      const message = String(err)
+      if (!message.includes('JSON')) throw err
     }
 
     await Bun.sleep(1000)
