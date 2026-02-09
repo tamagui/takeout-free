@@ -7,6 +7,7 @@
  */
 
 import { Socket } from 'node:net'
+import { getTestEnv } from './helpers/get-test-env'
 
 // --- config ---
 const FRONTEND_PORT = 8081
@@ -46,6 +47,18 @@ async function spawn(cmd: string) {
   const proc = Bun.spawn(['bash', '-c', cmd], {
     stdout: 'inherit',
     stderr: 'inherit',
+  })
+  processes.push(proc)
+  proc.unref()
+  return proc
+}
+
+async function spawnWithEnv(cmd: string, env: Record<string, string>) {
+  console.info(`$ ${cmd} &`)
+  const proc = Bun.spawn(['bash', '-c', cmd], {
+    stdout: 'inherit',
+    stderr: 'inherit',
+    env: { ...process.env, ...env },
   })
   processes.push(proc)
   proc.unref()
@@ -149,7 +162,13 @@ async function main() {
 
     // start frontend
     console.info('\nstarting frontend...')
-    await spawn('bun ./scripts/ci/start-frontend.ts')
+    const testEnv = await getTestEnv()
+    await spawnWithEnv('bun one serve --port 8081', {
+      ...testEnv,
+      IS_TESTING: '1',
+      ONE_SERVER_URL: 'http://localhost:8081',
+      BETTER_AUTH_URL: 'http://localhost:8081',
+    })
     await waitForPort(FRONTEND_PORT, 60_000)
 
     // run tests
