@@ -1,13 +1,8 @@
 import { router } from 'one'
 import { useState } from 'react'
-import { Circle, isWeb, SizableText, Spinner, View, XStack, YStack } from 'tamagui'
+import { Circle, isWeb, Spinner, XStack, YStack } from 'tamagui'
 
-import {
-  APP_NAME,
-  EULA_URL,
-  PRIVACY_POLICY_URL,
-  TERMS_OF_SERVICE_URL,
-} from '~/constants/app'
+import { APP_NAME } from '~/constants/app'
 import { signInAsDemo } from '~/features/auth/client/signInAsDemo'
 import { isDemoMode } from '~/helpers/isDemoMode'
 import { Link } from '~/interface/app/Link'
@@ -146,14 +141,6 @@ export const LoginPage = () => {
               icon={<AppleIcon size={20} />}
             />
           </XStack>
-        </YStack>
-        <YStack items="center" gap="$2" mt="$4">
-          <SizableText size="$3" text="center" color="$color10">
-            {` By continuing, you agree to our\n`}
-            <Link href={TERMS_OF_SERVICE_URL}>Terms of Service</Link>,{' '}
-            <Link href={PRIVACY_POLICY_URL}>Privacy Policy</Link> and{' '}
-            <Link href={EULA_URL}>EULA.</Link>
-          </SizableText>
         </YStack>
       </YStack>
     </YStack>
