@@ -7,7 +7,6 @@ packages/*/node_modules
 ios
 android
 .git
-.sst
 .expo
 **/tmp-data
 **/tmp

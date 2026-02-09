@@ -61,7 +61,6 @@
     "**/tmp-data/**",
     "**/.build/**",
     "storage/**",
-    "**/.sst/**",
     "**/.output/**",
     "**/migrations/meta/**",
     "**/migrate-dist.js",

@@ -23,7 +23,6 @@ export default function DocsIntroduction() {
             <SizableText>• Better Auth authentication</SizableText>
             <SizableText>• Tamagui UI components</SizableText>
             <SizableText>• One.js universal routing</SizableText>
-            <SizableText>• Uncloud self-hosted deployment</SizableText>
           </YStack>
 
           <YStack gap="$3" mt="$4">

@@ -42,7 +42,6 @@
     "**/tmp-data/**",
     "**/.build/**",
     "storage/**",
-    "**/.sst/**",
     "**/.output/**",
     "**/.vscode/**",
     "**/.claude/**",

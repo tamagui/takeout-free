@@ -151,7 +151,7 @@ export const HomePage = memo(() => {
                     One • Tamagui • Zero • Better Auth
                   </SizableText>
                   <SizableText size="$4" color="$color11">
-                    Uncloud • Bun • TypeScript
+                    Bun • TypeScript
                   </SizableText>
                 </YStack>
                 <SizableText size="$4" mt="$2" opacity={0.7}>

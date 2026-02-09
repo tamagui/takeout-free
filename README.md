@@ -25,7 +25,7 @@ For mobile development:
 
 ```bash
 bun install
-bun backend      # start docker services (postgres, zero, minio)
+bun backend      # start docker services (postgres, zero)
 bun dev          # start web dev server at http://localhost:8092
 ```
 
@@ -38,7 +38,6 @@ At a high level, the primary technologies used are:
 - [Tamagui](https://tamagui.dev) - Universal UI
 - [Better Auth](https://www.better-auth.com) - Authentication
 - [Drizzle ORM](https://orm.drizzle.team) - Database schema
-- [Uncloud](https://uncloud.run) - Self-hosted deployment
 
 ## Project Structure
 
@@ -130,7 +129,7 @@ BETTER_AUTH_URL=<url>
 # server
 ONE_SERVER_URL=<url>
 
-# database (derived from DEPLOY_DB for uncloud)
+# zero
 ZERO_UPSTREAM_DB=<connection-string>
 ZERO_CVR_DB=<connection-string>
 ZERO_CHANGE_DB=<connection-string>
@@ -142,12 +141,6 @@ CLOUDFLARE_R2_SECRET_KEY=<secret>
 ```
 
 See `.env.production.example` for complete production configuration.
-
-## Deployment
-
-### Uncloud (self-hosted)
-
-Deploy to any VPS with Docker. See [deployment-uncloud.md](./docs/deployment-uncloud.md).
 
 ## Mobile Apps
 

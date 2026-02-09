@@ -16,7 +16,15 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { scheduleOnRN } from 'react-native-worklets'
-import { SizableText, Theme, useTheme, View, XStack, YStack, type ThemeName } from 'tamagui'
+import {
+  SizableText,
+  Theme,
+  useTheme,
+  View,
+  XStack,
+  YStack,
+  type ThemeName,
+} from 'tamagui'
 
 import { toastEmitter } from './emitter'
 

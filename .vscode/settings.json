@@ -56,7 +56,6 @@
     "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
   },
   "files.exclude": {
-    ".sst": true,
     ".tamagui": true,
     ".takeout": true,
     ".expo": true,

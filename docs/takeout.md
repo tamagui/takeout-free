@@ -6,8 +6,7 @@ description: Takeout Free - production-ready starter for real-time cross-platfor
 # Takeout Free
 
 Takeout Free is a production-ready starter for building real-time, cross-platform
-applications. It's the open-source version of Takeout with simplified deployment
-via Uncloud (self-hosted Docker).
+applications. It's a highly simplified, open-source version of Takeout.
 
 Find out much more by using `bun tko` for available commands and
 `bun tko docs list` for built-in docs.
@@ -23,11 +22,6 @@ codebase.
 The CI/CD setup runs on GitHub Actions. The pipeline handles running Playwright
 integration tests, building the web app, running the full test suite with Vitest
 and Playwright, and managing database migrations.
-
-## Uncloud Deployment
-
-This starter uses Uncloud for self-hosted deployment to any VPS with Docker.
-See [deployment-uncloud.md](./deployment-uncloud.md) for setup instructions.
 
 ## Services Integration
 
