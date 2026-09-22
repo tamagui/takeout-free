@@ -1,4 +1,4 @@
-import { assertString } from '@take-out/helpers'
+import { assertString } from '@o/helpers'
 import { createZeroServer } from 'on-zero/server'
 
 import { models } from '~/data/generated/models'

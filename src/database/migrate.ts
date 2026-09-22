@@ -1,4 +1,4 @@
-import { migrate } from '@take-out/postgres/migrate'
+import { migrate } from '@o/database/postgres/migrate'
 import { getTableName } from 'drizzle-orm'
 import { PgTable } from 'drizzle-orm/pg-core'
 
@@ -56,7 +56,7 @@ export async function main() {
   console.info('🚀 running migrations...')
   await migrate({
     connectionString: ZERO_UPSTREAM_DB!,
-    migrationsGlob: migrationsTS,
+    migrations: migrationsTS,
     cvrDb: stripQueryParams(ZERO_CVR_DB),
     changeDb: stripQueryParams(ZERO_CHANGE_DB),
     gitSha: process.env.GIT_SHA,

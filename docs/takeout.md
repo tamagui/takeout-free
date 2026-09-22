@@ -43,7 +43,7 @@ for better performance and smaller bundles.
 
 ## Developer Utilities
 
-@take-out/helpers and the ./src/ folder has a lot of nice helpers. There's an
+@o/helpers and the ./src/ folder has a lot of nice helpers. There's an
 event emitter system for cross-component communication, keyboard shortcut
 management that works across platforms, URL unfurling for rich link previews,
 image upload with progress and error handling, and drag and drop that works in

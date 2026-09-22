@@ -1,4 +1,4 @@
-import { createServerHelpers } from '@take-out/postgres'
+import { createServerHelpers } from '@o/database/postgres'
 
 import { database } from './database'
 
