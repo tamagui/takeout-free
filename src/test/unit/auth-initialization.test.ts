@@ -11,7 +11,7 @@ describe('auth initialization requirements', () => {
   describe('storage driver must be set before auth storage is accessed', () => {
     it('storage operations should work when driver is set first', async () => {
       // simulate the correct initialization order
-      const { setStorageDriver, createStorage } = await import('@take-out/helpers')
+      const { setStorageDriver, createStorage } = await import('@o/helpers')
 
       // set up mock driver
       const mockData = new Map<string, string>()
