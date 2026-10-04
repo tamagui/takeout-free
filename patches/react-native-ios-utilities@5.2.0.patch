@@ -148,6 +148,45 @@ index 4083b045e1a2ccf7edf23a382c48d1ca98e7e944..f99da0c5d45d6ca49028645010588b33
  @end
 +
 +#endif
+diff --git a/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm b/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
+index 333b40537e41190a433ac261ca521bf7f693c313..b5e57263d5b2863d115a4630756e8493e5f4cbf5 100644
+--- a/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
++++ b/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
+@@ -10,7 +10,7 @@
+ 
+ #import "RNIBaseViewUtils.h"
+ 
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+ 
+diff --git a/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm b/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
+index cc137e21f376661224eb6d4d0ca0b2448d00845f..e65fa78109c65ab8ca057a3161a100450b2fad02 100644
+--- a/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
++++ b/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
+@@ -13,7 +13,7 @@
+ 
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ 
+ 
+ @interface RNIDummyTestViewManager : RCTViewManager
+diff --git a/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm b/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
+index 94ca7d29cc8b6282e516503d8ded253be23ff46e..e07e9914782047877f69f2007de18cdd80aa715e 100644
+--- a/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
++++ b/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
+@@ -10,7 +10,7 @@
+ 
+ #import "RNIBaseViewUtils.h"
+ 
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+ 
 diff --git a/ios/react-native-ios-utilities.h b/ios/react-native-ios-utilities.h
 index 0243b149e02fa477ddc0456fbf4ebe7c5cf082d2..caea644b80c1e8b353b2898f079c7966681913b8 100644
 --- a/ios/react-native-ios-utilities.h
