@@ -88,12 +88,12 @@
     "@tamagui/themes": "2.0.0-rc.34",
     "@tamagui/toast": "2.0.0-rc.34",
     "@tamagui/vite-plugin": "2.0.0-rc.34",
-    "@vxrn/color-scheme": "2.0.0-0.canary.1791073447374",
-    "@vxrn/compiler": "2.0.0-0.canary.1791073447374",
-    "@vxrn/resolve": "2.0.0-0.canary.1791073447374",
-    "@vxrn/tslib-lite": "2.0.0-0.canary.1791073447374",
-    "@vxrn/use-isomorphic-layout-effect": "2.0.0-0.canary.1791073447374",
-    "@vxrn/vite-plugin-metro": "2.0.0-0.canary.1791073447374",
+    "@vxrn/color-scheme": "2.0.0-0.canary.1791082782289",
+    "@vxrn/compiler": "2.0.0-0.canary.1791082782289",
+    "@vxrn/resolve": "2.0.0-0.canary.1791082782289",
+    "@vxrn/tslib-lite": "2.0.0-0.canary.1791082782289",
+    "@vxrn/use-isomorphic-layout-effect": "2.0.0-0.canary.1791082782289",
+    "@vxrn/vite-plugin-metro": "2.0.0-0.canary.1791082782289",
     "better-auth": "^1.3.32",
     "burnt": "^0.12.2",
     "drizzle-orm": "1.0.0-beta.9-e89174b",
@@ -114,7 +114,7 @@
     "expo-web-browser": "58.0.0-canary-20260909-ea7a89a",
     "motion": "12.36.0",
     "on-zero": "0.2.10",
-    "one": "2.0.0-0.canary.1791073447374",
+    "one": "2.0.0-0.canary.1791082782289",
     "pg": "8.18.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -129,12 +129,12 @@
     "react-native-reanimated": "~4.6.0",
     "react-native-safe-area-context": "~5.10.0",
     "react-native-screens": "~4.27.0",
-    "react-native-svg": "15.15.3",
+    "react-native-svg": "15.15.5",
     "react-native-worklets": "~0.12.2",
     "rolldown": "^1.0.0-rc.12",
     "tamagui": "2.0.0-rc.34",
     "valibot": "^1.1.0",
-    "vxrn": "2.0.0-0.canary.1791073447374",
+    "vxrn": "2.0.0-0.canary.1791082782289",
     "zeego": "^3.0.6"
   },
   "devDependencies": {
@@ -216,5 +216,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "patchedDependencies": {
+    "@react-native-menu/menu@2.0.0": "patches/@react-native-menu%2Fmenu@2.0.0.patch",
+    "react-native-ios-utilities@5.2.0": "patches/react-native-ios-utilities@5.2.0.patch"
   }
 }

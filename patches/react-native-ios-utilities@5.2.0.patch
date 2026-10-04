@@ -1,0 +1,85 @@
+diff --git a/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift b/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
+index 09be306d5aa39337c5114c2ad6ba7513218e0751..792b12ab7ceaf0bd3f843a95d52f3acb7672b688 100644
+--- a/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
++++ b/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
+@@ -25,15 +25,8 @@ public extension RCTView {
+     return rootView.recursivelyFindSubview(whereType: targetType);
+   };
+   
+-  var closestParentReactContentView: RCTRootContentView? {
+-    let targetType = RCTRootContentView.self;
+-  
+-    if let match = self.recursivelyFindParentView(whereType: targetType) {
+-      return match;
+-    };
+-    
+-    guard let rootView = self.rootViewForCurrentWindow else { return nil };
+-    return rootView.recursivelyFindSubview(whereType: targetType);
++  var closestParentReactContentView: UIView? {
++    reactFabricRootContent;
+   };
+   
+   var reactTouchHandlers: [RCTTouchHandler]? {
+@@ -58,6 +51,8 @@ public extension RCTView {
+       currentView = superview;
+     };
+     
+-    return closestParentReactContentView?.reactTouchHandlers?.first;
++    return closestParentReactContentView?.gestureRecognizers?.compactMap {
++      $0 as? RCTTouchHandler
++    }.first;
+   };
+ };
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h
+index 70b6d9eb20a001050e4fec02036d409142f1e34e..4d3bdf6918e568858ec8049dc1d25a80289faf38 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h
++++ b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h
+@@ -35,9 +35,9 @@ namespace facebook::react {
+ // MARK: Visible To Swift
+ // ----------------------
+ 
++@property (nullable, readonly, nonatomic) UIView *reactFabricRootContentView;
+ #if RCT_NEW_ARCH_ENABLED
+ @property (nullable, readonly, nonatomic) RNILayoutMetrics *reactLayoutMetrics;
+ #endif
+ 
+ @end
+-
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.mm b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.mm
+index fc3aca8dd19b7fa3bcaf00b9731b4370e77d0253..7782f3c4650014676e5997a5ae0e13095eba9822 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.mm
++++ b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.mm
+@@ -19,6 +19,7 @@
+ #import <React/RCTSurfaceHostingView.h>
+ #import <React/RCTFabricSurface.h>
+ #import <React/RCTViewComponentView.h>
++#import <React/RCTRootComponentView.h>
+ #endif
+ 
+ @implementation UIView (RNIFabricHelpers)
+@@ -101,6 +102,16 @@ - (RCTFabricSurface *)reactGetClosestFabricSurface
+ // ----------------------
+ 
+ #if RCT_NEW_ARCH_ENABLED
++- (UIView *)reactFabricRootContentView
++{
++  UIView *current = self;
++  while (current != nil) {
++    if ([current isKindOfClass:[RCTRootComponentView class]]) return current;
++    current = current.superview;
++  }
++  return nil;
++}
++
+ /// Works on fabric only
+ - (RNILayoutMetrics *)reactLayoutMetrics
+ {
+diff --git a/ios/react-native-ios-utilities.h b/ios/react-native-ios-utilities.h
+index 0243b149e02fa477ddc0456fbf4ebe7c5cf082d2..caea644b80c1e8b353b2898f079c7966681913b8 100644
+--- a/ios/react-native-ios-utilities.h
++++ b/ios/react-native-ios-utilities.h
+@@ -1,3 +1,2 @@
+ 
+-// #import <React/RCTView.h>
+-// #import "react-native-ios-utilities-umbrella.h"
++#import <React/RCTImageLoaderWithAttributionProtocol.h>
