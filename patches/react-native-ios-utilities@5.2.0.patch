@@ -174,6 +174,92 @@ index cc137e21f376661224eb6d4d0ca0b2448d00845f..e65fa78109c65ab8ca057a3161a10045
  
  
  @interface RNIDummyTestViewManager : RCTViewManager
+diff --git a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.h b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.h
+index addfb6d83d8ebec1e7e7a0e1ef0b2d4d5ea59bfb..a19cbe8f81049d2ab43a37013d1fa801b0518ed1 100644
+--- a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.h
++++ b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.h
+@@ -10,6 +10,7 @@
+ #ifdef RCT_NEW_ARCH_ENABLED
+ #include <RNIUtilitiesSpec/RNIUtilitiesSpec.h>
+ #import <ReactCommon/RCTTurboModule.h>
++#import <ReactCommon/RCTTurboModuleWithJSIBindings.h>
+ 
+ #else
+ #import <React/RCTBridge.h>
+@@ -20,13 +21,15 @@ typedef void (^RNIPromiseRejectBlock)(NSString * _Nonnull);
+ 
+ @interface RNIUtilitiesModule : NSObject
+ #ifdef RCT_NEW_ARCH_ENABLED
+-  <RCTBridgeModule, RCTTurboModule>
++  <RCTBridgeModule, RCTTurboModule, RCTTurboModuleWithJSIBindings>
+ #else
+   <RCTBridgeModule>
+ #endif
+ 
+ + (nonnull instancetype)shared;
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ - (void)installHostObjectIfNeeded;
++#endif
+ 
+ @end
+diff --git a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
+index 0e53f8489c5d1fbeba5325071da985b16490507b..6552df4ca3e7977a8ea228c9e1f2623bbb3bbc0c 100644
+--- a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
++++ b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
+@@ -69,25 +69,27 @@ - (instancetype)init
+   return self;
+ }
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ - (void)installHostObjectIfNeeded
+ {
+-  if(self->_didInstallHostObject){
+-    return;
+-  };
+-  
+-  RCTBridge *bridge = [RCTBridge currentBridge];
+-  
+-  RCTCxxBridge *cxxBridge = (RCTCxxBridge *)bridge;
+-  if (cxxBridge == nil) {
+-    return;
+-  };
+-  
+-  auto jsiRuntime = (jsi::Runtime *)cxxBridge.runtime;
+-  if (jsiRuntime == nil) {
+-    return;
+-  };
+-    
+-  auto &runtime = *jsiRuntime;
++  RCTCxxBridge *bridge = (RCTCxxBridge *)[RCTBridge currentBridge];
++  if (bridge == nil || bridge.runtime == nil) return;
++  [self installHostObjectWithRuntime:*(jsi::Runtime *)bridge.runtime];
++}
++#endif
++
++#if RCT_NEW_ARCH_ENABLED
++- (void)installJSIBindingsWithRuntime:(jsi::Runtime &)runtime
++                          callInvoker:(const std::shared_ptr<react::CallInvoker> &)callInvoker
++{
++  [self installHostObjectWithRuntime:runtime];
++}
++#endif
++
++- (void)installHostObjectWithRuntime:(jsi::Runtime &)runtime
++{
++  if (self->_didInstallHostObject) return;
++  auto jsiRuntime = &runtime;
+   __weak auto weakSelf = self;
+   
+   auto moduleName = RNIUtilities::RNIUtilitiesTurboModule::MODULE_NAME;
+@@ -384,7 +386,6 @@ + (BOOL)requiresMainQueueSetup
+ /// Doesn't get called...
+ - (std::shared_ptr<TurboModule>)getTurboModule:(const ObjCTurboModule::InitParams &)params
+ {
+- [self installHostObjectIfNeeded];
+  return std::make_shared<react::NativeRNIUtilitiesModuleSpecJSI>(params);
+ }
+ #endif
 diff --git a/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm b/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
 index 94ca7d29cc8b6282e516503d8ded253be23ff46e..e07e9914782047877f69f2007de18cdd80aa715e 100644
 --- a/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
