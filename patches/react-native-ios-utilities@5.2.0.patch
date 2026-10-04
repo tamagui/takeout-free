@@ -30,6 +30,44 @@ index 09be306d5aa39337c5114c2ad6ba7513218e0751..792b12ab7ceaf0bd3f843a95d52f3acb
 +    }.first;
    };
  };
+diff --git a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.h b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.h
+index d74e1492649b4616686b83fb49bb4baecba636bc..b950fd28fa1d83736de4db169161aebc2a18efe4 100644
+--- a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.h
++++ b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.h
+@@ -36,6 +36,7 @@ namespace facebook::react {
+ 
+ - (nullable RCTAppDelegate * )reactAppDelegate;
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ - (nullable RCTSurfacePresenterBridgeAdapter *)reactBridgeAdapter;
+ 
+ - (nullable RCTRootViewFactory *)reactRootViewFactory;
+@@ -52,4 +53,6 @@ namespace facebook::react {
+ - (nullable facebook::react::UIManager *)reactUIManager;
+ #endif
+ 
++#endif
++
+ @end
+diff --git a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
+index a3cb9522f3727cc7f9f148675bf4c35cc7a19e27..8d3514ee8b6f1bd2564689afc58a66acc0106f84 100644
+--- a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
++++ b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
+@@ -111,6 +111,7 @@ - (RCTAppDelegate *)reactAppDelegate
+   return nil;
+ }
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ - (RCTSurfacePresenterBridgeAdapter *)reactBridgeAdapter
+ {
+   #ifdef USE_RCT_APP_DELEGATE
+@@ -192,5 +193,6 @@ - (RCTScheduler *)reactScheduler
+   return [reactScheduler uiManager].get();
+ }
+ #endif
++#endif
+ @end
+ 
 diff --git a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h
 index 70b6d9eb20a001050e4fec02036d409142f1e34e..4d3bdf6918e568858ec8049dc1d25a80289faf38 100644
 --- a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h
@@ -74,6 +112,42 @@ index fc3aca8dd19b7fa3bcaf00b9731b4370e77d0253..7782f3c4650014676e5997a5ae0e1309
  /// Works on fabric only
  - (RNILayoutMetrics *)reactLayoutMetrics
  {
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.h b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.h
+index f953e47e86e6ed543f6a9f87d2de2976dc7fb71c..b69573c3d03aeaf8d5894aedbead2e303887be96 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.h
++++ b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.h
+@@ -5,6 +5,7 @@
+ //  Created by Dominic Go on 5/17/24.
+ //
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ #import <UIKit/UIKit.h>
+ #import <React/RCTLayout.h>
+ 
+@@ -25,3 +26,5 @@ typedef void (^RNIPaperShadowViewCompletionBlock)(RCTShadowView * _Nullable shad
+ - (void)reactGetShadowViewWithCompletionHandler:(nonnull RNIPaperShadowViewCompletionBlock)completionBlock;
+ 
+ @end
++
++#endif
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
+index 4083b045e1a2ccf7edf23a382c48d1ca98e7e944..f99da0c5d45d6ca49028645010588b33e7cdb480 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
++++ b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
+@@ -5,6 +5,7 @@
+ //  Created by Dominic Go on 5/17/24.
+ //
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ #import "UIView+RNIPaperHelpers.h"
+ 
+ #import "RNIBaseView.h"
+@@ -150,3 +151,5 @@ - (void)reactGetShadowViewWithCompletionHandler:(RNIPaperShadowViewCompletionBlo
+ }
+ 
+ @end
++
++#endif
 diff --git a/ios/react-native-ios-utilities.h b/ios/react-native-ios-utilities.h
 index 0243b149e02fa477ddc0456fbf4ebe7c5cf082d2..caea644b80c1e8b353b2898f079c7966681913b8 100644
 --- a/ios/react-native-ios-utilities.h
