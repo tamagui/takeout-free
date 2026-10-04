@@ -1,0 +1,15 @@
+diff --git a/ios/Fabric/RCTTabViewComponentView.mm b/ios/Fabric/RCTTabViewComponentView.mm
+index 9eee1811eb50f9e096d573866c7988207296ac51..c6b0eea975985e08cdf8713c9eebc02484c9609a 100644
+--- a/ios/Fabric/RCTTabViewComponentView.mm
++++ b/ios/Fabric/RCTTabViewComponentView.mm
+@@ -17,8 +17,8 @@
+ #import <React/RCTImageLoader.h>
+ #import <React/RCTImageSource.h>
+ #import <React/RCTBridge+Private.h>
+-#import "RCTImagePrimitivesConversions.h"
+-#import "RCTConversions.h"
++#import <react/renderer/imagemanager/RCTImagePrimitivesConversions.h>
++#import <React/RCTConversions.h>
+ 
+ #if TARGET_OS_OSX
+ typedef NSView PlatformView;
