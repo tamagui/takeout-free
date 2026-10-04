@@ -1,0 +1,284 @@
+diff --git a/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift b/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
+index 09be306d5aa39337c5114c2ad6ba7513218e0751..792b12ab7ceaf0bd3f843a95d52f3acb7672b688 100644
+--- a/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
++++ b/ios/Sources/Extensions+Helpers/RCTView+Helpers.swift
+@@ -25,15 +25,8 @@ public extension RCTView {
+     return rootView.recursivelyFindSubview(whereType: targetType);
+   };
+   
+-  var closestParentReactContentView: RCTRootContentView? {
+-    let targetType = RCTRootContentView.self;
+-  
+-    if let match = self.recursivelyFindParentView(whereType: targetType) {
+-      return match;
+-    };
+-    
+-    guard let rootView = self.rootViewForCurrentWindow else { return nil };
+-    return rootView.recursivelyFindSubview(whereType: targetType);
++  var closestParentReactContentView: UIView? {
++    reactFabricRootContent;
+   };
+   
+   var reactTouchHandlers: [RCTTouchHandler]? {
+@@ -58,6 +51,8 @@ public extension RCTView {
+       currentView = superview;
+     };
+     
+-    return closestParentReactContentView?.reactTouchHandlers?.first;
++    return closestParentReactContentView?.gestureRecognizers?.compactMap {
++      $0 as? RCTTouchHandler
++    }.first;
+   };
+ };
+diff --git a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.h b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.h
+index d74e1492649b4616686b83fb49bb4baecba636bc..b950fd28fa1d83736de4db169161aebc2a18efe4 100644
+--- a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.h
++++ b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.h
+@@ -36,6 +36,7 @@ namespace facebook::react {
+ 
+ - (nullable RCTAppDelegate * )reactAppDelegate;
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ - (nullable RCTSurfacePresenterBridgeAdapter *)reactBridgeAdapter;
+ 
+ - (nullable RCTRootViewFactory *)reactRootViewFactory;
+@@ -52,4 +53,6 @@ namespace facebook::react {
+ - (nullable facebook::react::UIManager *)reactUIManager;
+ #endif
+ 
++#endif
++
+ @end
+diff --git a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
+index a3cb9522f3727cc7f9f148675bf4c35cc7a19e27..8d3514ee8b6f1bd2564689afc58a66acc0106f84 100644
+--- a/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
++++ b/ios/Sources/ObjcHelpers/UIApplication+RNIHelpers.mm
+@@ -111,6 +111,7 @@ - (RCTAppDelegate *)reactAppDelegate
+   return nil;
+ }
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ - (RCTSurfacePresenterBridgeAdapter *)reactBridgeAdapter
+ {
+   #ifdef USE_RCT_APP_DELEGATE
+@@ -192,5 +193,6 @@ - (RCTScheduler *)reactScheduler
+   return [reactScheduler uiManager].get();
+ }
+ #endif
++#endif
+ @end
+ 
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h
+index 70b6d9eb20a001050e4fec02036d409142f1e34e..4d3bdf6918e568858ec8049dc1d25a80289faf38 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h
++++ b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.h
+@@ -35,9 +35,9 @@ namespace facebook::react {
+ // MARK: Visible To Swift
+ // ----------------------
+ 
++@property (nullable, readonly, nonatomic) UIView *reactFabricRootContentView;
+ #if RCT_NEW_ARCH_ENABLED
+ @property (nullable, readonly, nonatomic) RNILayoutMetrics *reactLayoutMetrics;
+ #endif
+ 
+ @end
+-
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.mm b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.mm
+index fc3aca8dd19b7fa3bcaf00b9731b4370e77d0253..7782f3c4650014676e5997a5ae0e13095eba9822 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.mm
++++ b/ios/Sources/ObjcHelpers/UIView+RNIFabricHelpers.mm
+@@ -19,6 +19,7 @@
+ #import <React/RCTSurfaceHostingView.h>
+ #import <React/RCTFabricSurface.h>
+ #import <React/RCTViewComponentView.h>
++#import <React/RCTRootComponentView.h>
+ #endif
+ 
+ @implementation UIView (RNIFabricHelpers)
+@@ -101,6 +102,16 @@ - (RCTFabricSurface *)reactGetClosestFabricSurface
+ // ----------------------
+ 
+ #if RCT_NEW_ARCH_ENABLED
++- (UIView *)reactFabricRootContentView
++{
++  UIView *current = self;
++  while (current != nil) {
++    if ([current isKindOfClass:[RCTRootComponentView class]]) return current;
++    current = current.superview;
++  }
++  return nil;
++}
++
+ /// Works on fabric only
+ - (RNILayoutMetrics *)reactLayoutMetrics
+ {
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.h b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.h
+index f953e47e86e6ed543f6a9f87d2de2976dc7fb71c..b69573c3d03aeaf8d5894aedbead2e303887be96 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.h
++++ b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.h
+@@ -5,6 +5,7 @@
+ //  Created by Dominic Go on 5/17/24.
+ //
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ #import <UIKit/UIKit.h>
+ #import <React/RCTLayout.h>
+ 
+@@ -25,3 +26,5 @@ typedef void (^RNIPaperShadowViewCompletionBlock)(RCTShadowView * _Nullable shad
+ - (void)reactGetShadowViewWithCompletionHandler:(nonnull RNIPaperShadowViewCompletionBlock)completionBlock;
+ 
+ @end
++
++#endif
+diff --git a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
+index 4083b045e1a2ccf7edf23a382c48d1ca98e7e944..f99da0c5d45d6ca49028645010588b33e7cdb480 100644
+--- a/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
++++ b/ios/Sources/ObjcHelpers/UIView+RNIPaperHelpers.mm
+@@ -5,6 +5,7 @@
+ //  Created by Dominic Go on 5/17/24.
+ //
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ #import "UIView+RNIPaperHelpers.h"
+ 
+ #import "RNIBaseView.h"
+@@ -150,3 +151,5 @@ - (void)reactGetShadowViewWithCompletionHandler:(RNIPaperShadowViewCompletionBlo
+ }
+ 
+ @end
++
++#endif
+diff --git a/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm b/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
+index 333b40537e41190a433ac261ca521bf7f693c313..b5e57263d5b2863d115a4630756e8493e5f4cbf5 100644
+--- a/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
++++ b/ios/Sources/RNIDetachedView/RNIDetachedViewManager.mm
+@@ -10,7 +10,7 @@
+ 
+ #import "RNIBaseViewUtils.h"
+ 
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+ 
+diff --git a/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm b/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
+index cc137e21f376661224eb6d4d0ca0b2448d00845f..e65fa78109c65ab8ca057a3161a100450b2fad02 100644
+--- a/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
++++ b/ios/Sources/RNIDummyTestView/RNIDummyTestViewManager.mm
+@@ -13,7 +13,7 @@
+ 
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ 
+ 
+ @interface RNIDummyTestViewManager : RCTViewManager
+diff --git a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.h b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.h
+index addfb6d83d8ebec1e7e7a0e1ef0b2d4d5ea59bfb..a19cbe8f81049d2ab43a37013d1fa801b0518ed1 100644
+--- a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.h
++++ b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.h
+@@ -10,6 +10,7 @@
+ #ifdef RCT_NEW_ARCH_ENABLED
+ #include <RNIUtilitiesSpec/RNIUtilitiesSpec.h>
+ #import <ReactCommon/RCTTurboModule.h>
++#import <ReactCommon/RCTTurboModuleWithJSIBindings.h>
+ 
+ #else
+ #import <React/RCTBridge.h>
+@@ -20,13 +21,15 @@ typedef void (^RNIPromiseRejectBlock)(NSString * _Nonnull);
+ 
+ @interface RNIUtilitiesModule : NSObject
+ #ifdef RCT_NEW_ARCH_ENABLED
+-  <RCTBridgeModule, RCTTurboModule>
++  <RCTBridgeModule, RCTTurboModule, RCTTurboModuleWithJSIBindings>
+ #else
+   <RCTBridgeModule>
+ #endif
+ 
+ + (nonnull instancetype)shared;
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ - (void)installHostObjectIfNeeded;
++#endif
+ 
+ @end
+diff --git a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
+index 0e53f8489c5d1fbeba5325071da985b16490507b..6552df4ca3e7977a8ea228c9e1f2623bbb3bbc0c 100644
+--- a/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
++++ b/ios/Sources/RNIUtilitiesModule/RNIUtilitiesModule.mm
+@@ -69,25 +69,27 @@ - (instancetype)init
+   return self;
+ }
+ 
++#ifndef RCT_REMOVE_LEGACY_ARCH
+ - (void)installHostObjectIfNeeded
+ {
+-  if(self->_didInstallHostObject){
+-    return;
+-  };
+-  
+-  RCTBridge *bridge = [RCTBridge currentBridge];
+-  
+-  RCTCxxBridge *cxxBridge = (RCTCxxBridge *)bridge;
+-  if (cxxBridge == nil) {
+-    return;
+-  };
+-  
+-  auto jsiRuntime = (jsi::Runtime *)cxxBridge.runtime;
+-  if (jsiRuntime == nil) {
+-    return;
+-  };
+-    
+-  auto &runtime = *jsiRuntime;
++  RCTCxxBridge *bridge = (RCTCxxBridge *)[RCTBridge currentBridge];
++  if (bridge == nil || bridge.runtime == nil) return;
++  [self installHostObjectWithRuntime:*(jsi::Runtime *)bridge.runtime];
++}
++#endif
++
++#if RCT_NEW_ARCH_ENABLED
++- (void)installJSIBindingsWithRuntime:(jsi::Runtime &)runtime
++                          callInvoker:(const std::shared_ptr<react::CallInvoker> &)callInvoker
++{
++  [self installHostObjectWithRuntime:runtime];
++}
++#endif
++
++- (void)installHostObjectWithRuntime:(jsi::Runtime &)runtime
++{
++  if (self->_didInstallHostObject) return;
++  auto jsiRuntime = &runtime;
+   __weak auto weakSelf = self;
+   
+   auto moduleName = RNIUtilities::RNIUtilitiesTurboModule::MODULE_NAME;
+@@ -384,7 +386,6 @@ + (BOOL)requiresMainQueueSetup
+ /// Doesn't get called...
+ - (std::shared_ptr<TurboModule>)getTurboModule:(const ObjCTurboModule::InitParams &)params
+ {
+- [self installHostObjectIfNeeded];
+  return std::make_shared<react::NativeRNIUtilitiesModuleSpecJSI>(params);
+ }
+ #endif
+diff --git a/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm b/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
+index 94ca7d29cc8b6282e516503d8ded253be23ff46e..e07e9914782047877f69f2007de18cdd80aa715e 100644
+--- a/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
++++ b/ios/Sources/RNIWrapperView/RNIWrapperViewManager.mm
+@@ -10,7 +10,7 @@
+ 
+ #import "RNIBaseViewUtils.h"
+ 
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTUIManager.h>
+ 
+diff --git a/ios/react-native-ios-utilities.h b/ios/react-native-ios-utilities.h
+index 0243b149e02fa477ddc0456fbf4ebe7c5cf082d2..caea644b80c1e8b353b2898f079c7966681913b8 100644
+--- a/ios/react-native-ios-utilities.h
++++ b/ios/react-native-ios-utilities.h
+@@ -1,3 +1,2 @@
+ 
+-// #import <React/RCTView.h>
+-// #import "react-native-ios-utilities-umbrella.h"
++#import <React/RCTImageLoaderWithAttributionProtocol.h>
