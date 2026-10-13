@@ -1,4 +1,8 @@
-# Takeout Free
+# Takeout Free (deprecated)
+
+> **This repo is deprecated and no longer maintained.** Use
+> **[Takeout](https://github.com/tamagui/takeout2)** instead, or start a new
+> app with `npx one` and pick the Takeout template.
 
 > **[Takeout Pro](https://tamagui.dev/takeout)** - The full version with more features, templates, and support.
 
